@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Player {
-    private UUID id;
+    private final UUID id;
     private Nickname nickname;
     private Email email;
     private PasswordHash passwordHash;
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     private Player(UUID id, Nickname nickname, Email email, PasswordHash passwordHash, LocalDateTime createdAt, LocalDateTime updatedAt) {
