@@ -32,6 +32,16 @@ public class Player {
         return new Player(id, nickname, email, passwordHash, createdAt, updatedAt);
     }
 
+    public void changeEmail(Email email) {
+        this.email = email;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void renameTo(Nickname nickname){
+        this.nickname = nickname;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public UUID getId() {
         return id;
     }
