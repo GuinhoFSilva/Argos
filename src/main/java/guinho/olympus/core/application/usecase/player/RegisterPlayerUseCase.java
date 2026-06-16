@@ -4,6 +4,8 @@ import guinho.olympus.core.application.abstractions.PasswordHasher;
 import guinho.olympus.core.application.repository.player.PlayerMutation;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.usecase.player.dto.CreatePlayerDto;
+import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
+import guinho.olympus.core.application.usecase.player.mapper.PlayerMapper;
 import guinho.olympus.core.application.usecase.player.shared.exception.EmailAlreadyExistsException;
 import guinho.olympus.core.application.usecase.player.shared.exception.NicknameAlreadyExistsException;
 import guinho.olympus.core.domain.player.Player;
@@ -23,7 +25,7 @@ public class RegisterPlayerUseCase {
         this.hasher = hasher;
     }
 
-    public Player execute(CreatePlayerDto command) {
+    public ResponsePlayerDto execute(CreatePlayerDto command) {
         Password password = Password.of(command.password());
         Nickname nickname = Nickname.of(command.nickname());
         Email email = Email.of(command.email());
@@ -42,6 +44,8 @@ public class RegisterPlayerUseCase {
                 PasswordHash.of(passwordHash)
         );
 
-        return mutationService.save(newPlayer);
+        Player savedPlayer = mutationService.save(newPlayer);
+
+        return PlayerMapper.toResponse(savedPlayer);
     }
 }

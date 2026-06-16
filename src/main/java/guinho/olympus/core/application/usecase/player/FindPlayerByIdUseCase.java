@@ -1,6 +1,8 @@
 package guinho.olympus.core.application.usecase.player;
 
 import guinho.olympus.core.application.repository.player.PlayerQuery;
+import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
+import guinho.olympus.core.application.usecase.player.mapper.PlayerMapper;
 import guinho.olympus.core.application.usecase.player.shared.exception.ResourceNotFoundException;
 import guinho.olympus.core.domain.player.Player;
 
@@ -13,11 +15,13 @@ public class FindPlayerByIdUseCase {
         this.queryService = queryService;
     }
 
-    public Player findById(String id) {
+    public ResponsePlayerDto findById(String id) {
         UUID uuid = UUID.fromString(id);
 
-        return queryService.findById(uuid).orElseThrow(
+        Player player = queryService.findById(uuid).orElseThrow(
                 () -> new ResourceNotFoundException("Player Not Found")
         );
+
+        return PlayerMapper.toResponse(player);
     }
 }
