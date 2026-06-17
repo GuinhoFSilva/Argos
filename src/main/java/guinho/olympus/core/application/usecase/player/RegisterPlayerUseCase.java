@@ -30,9 +30,10 @@ public class RegisterPlayerUseCase {
         Nickname nickname = Nickname.of(command.nickname());
         Email email = Email.of(command.email());
         boolean emailExists = queryService.emailExists(email);
-        boolean nicknameExists = queryService.nicknameExists(nickname);
 
         if(emailExists) throw new EmailAlreadyExistsException("Email already exists.");
+
+        boolean nicknameExists = queryService.nicknameExists(nickname);
 
         if(nicknameExists) throw new NicknameAlreadyExistsException("Nickname already exists.");
 
