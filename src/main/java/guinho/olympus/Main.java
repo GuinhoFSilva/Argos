@@ -2,6 +2,13 @@ package guinho.olympus;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        System.out.println("                                               _   _     \n" +
+                "     /\\                             /\\        | | | |    \n" +
+                "    /  \\   _ __ __ _  ___  ___     /  \\  _   _| |_| |__  \n" +
+                "   / /\\ \\ | '__/ _` |/ _ \\/ __|   / /\\ \\| | | | __| '_ \\ \n" +
+                "  / ____ \\| | | (_| | (_) \\__ \\  / ____ \\ |_| | |_| | | |\n" +
+                " /_/    \\_\\_|  \\__, |\\___/|___/ /_/    \\_\\__,_|\\__|_| |_|\n" +
+                "                __/ |                                    \n" +
+                "               |___/                                     ");
     }
 }

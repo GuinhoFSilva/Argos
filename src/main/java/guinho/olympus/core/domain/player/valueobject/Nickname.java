@@ -22,7 +22,7 @@ public class Nickname {
     }
 
     private static Boolean validNickname (String value) {
-        return value != null && value.length() <= 20;
+        return value != null && !value.isBlank() && value.length() <= 20;
     }
 
     public String getValue() {

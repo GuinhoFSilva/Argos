@@ -3,6 +3,7 @@ package guinho.olympus.core.domain.player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
+import guinho.olympus.core.domain.shared.UnchangedFieldException;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -33,11 +34,17 @@ public class Player {
     }
 
     public void changeEmail(Email email) {
+        if(email.getValue().equalsIgnoreCase(this.email.getValue())){
+            throw new UnchangedFieldException("The new email must be different from the current email");
+        }
         this.email = email;
         this.updatedAt = LocalDateTime.now();
     }
 
     public void renameTo(Nickname nickname){
+        if(nickname.getValue().equalsIgnoreCase(this.nickname.getValue())){
+            throw new UnchangedFieldException("The new nickname must be different from the current nickname");
+        }
         this.nickname = nickname;
         this.updatedAt = LocalDateTime.now();
     }
