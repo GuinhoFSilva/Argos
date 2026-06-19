@@ -15,10 +15,8 @@ public class FindPlayerByIdUseCase {
         this.queryService = queryService;
     }
 
-    public ResponsePlayerDto findById(String id) {
-        UUID uuid = UUID.fromString(id);
-
-        Player player = queryService.findById(uuid).orElseThrow(
+    public ResponsePlayerDto findById(UUID id) {
+        Player player = queryService.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Player Not Found")
         );
 

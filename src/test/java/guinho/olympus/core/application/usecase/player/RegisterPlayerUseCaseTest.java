@@ -94,7 +94,7 @@ class RegisterPlayerUseCaseTest {
 
         @Test
         public void shouldThrowInvalidArgumentExceptionWhenEmailIsInvalid() {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "inválido", "Testing!123");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "invalid", "Testing!123");
 
             Exception exception = assertThrows(InvalidArgumentException.class, () -> registerUseCase.execute(request));
 
