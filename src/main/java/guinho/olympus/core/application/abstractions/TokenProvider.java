@@ -5,5 +5,5 @@ import java.util.UUID;
 public interface TokenProvider {
     String generateToken(UUID userId);
 
-    boolean validateToken(String token);
+    boolean validateToken(String token, UUID userId);
 }
