@@ -9,11 +9,13 @@ import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public class JdbcPlayerRepository implements PlayerQuery, PlayerMutation {
     private final JdbcTemplate jdbcTemplate;
     private static final String SELECT_PLAYER = "SELECT id, nickname, email, password_hash, created_at, updated_at FROM players";
@@ -53,7 +55,7 @@ public class JdbcPlayerRepository implements PlayerQuery, PlayerMutation {
 
     @Override
     public Optional<Player> findById(UUID id) {
-        return  jdbcTemplate.query(SELECT_PLAYER + " WHERE id = ?", playerRowMapper, id).stream().findFirst();
+        return  jdbcTemplate.query(SELECT_PLAYER + " WHERE id = ?", playerRowMapper, id.toString()).stream().findFirst();
     }
 
     @Override
