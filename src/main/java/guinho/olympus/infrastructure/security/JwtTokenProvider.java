@@ -2,8 +2,6 @@ package guinho.olympus.infrastructure.security;
 
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Repository;
@@ -33,7 +31,7 @@ public class JwtTokenProvider implements TokenProvider {
         Date now = new Date(nowMillis);
         Date exp = new Date(nowMillis + 3600000);
 
-        return Jwts.builder().subject(userId.toString()).signWith(signingKey).issuedAt(now).expiration(exp).compact();
+        return Jwts.builder().subject(userId.toString()).signWith(signingKey, Jwts.SIG.HS256).issuedAt(now).expiration(exp).compact();
     }
 
     @Override

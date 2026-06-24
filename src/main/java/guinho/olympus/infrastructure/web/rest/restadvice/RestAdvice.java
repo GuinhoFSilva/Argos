@@ -1,9 +1,6 @@
 package guinho.olympus.infrastructure.web.rest.restadvice;
 
-import guinho.olympus.core.application.usecase.player.shared.exception.EmailAlreadyExistsException;
-import guinho.olympus.core.application.usecase.player.shared.exception.InvalidCredentialsException;
-import guinho.olympus.core.application.usecase.player.shared.exception.NicknameAlreadyExistsException;
-import guinho.olympus.core.application.usecase.player.shared.exception.ResourceNotFoundException;
+import guinho.olympus.core.application.usecase.player.shared.exception.*;
 import guinho.olympus.core.domain.shared.InvalidArgumentException;
 import guinho.olympus.core.domain.shared.UnchangedFieldException;
 import org.springframework.http.HttpStatus;
@@ -69,6 +66,11 @@ public class RestAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiError.of(ex.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
+    @ExceptionHandler(PlayerAccessDeniedException.class)
+    public ResponseEntity<ApiError> handlePlayerAccessDeniedException(PlayerAccessDeniedException ex) {
+        var error = ApiError.of(ex.getMessage(), HttpStatus.FORBIDDEN.value());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
@@ -76,4 +78,5 @@ public class RestAdvice {
         ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
+
 }

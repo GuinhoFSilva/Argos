@@ -4,6 +4,7 @@ import guinho.olympus.core.application.usecase.player.FindAllPlayersUseCase;
 import guinho.olympus.core.application.usecase.player.FindPlayerByIdUseCase;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,19 +21,21 @@ public class PlayerController {
         this.findAllPlayersUseCase = findAllPlayersUseCase;
     }
 
-    @GetMapping
-    public ResponseEntity<List<ResponsePlayerDto>> findAll() {
-        List<ResponsePlayerDto> players = findAllPlayersUseCase.findAll();
-
-        if(players.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok().body(players);
-    }
+//    @GetMapping  // AINDA NÃO PROTEGIDO
+//    public ResponseEntity<List<ResponsePlayerDto>> findAll() {
+//        List<ResponsePlayerDto> players = findAllPlayersUseCase.findAll();
+//
+//        if(players.isEmpty()) {
+//            return ResponseEntity.noContent().build();
+//        }
+//
+//        return ResponseEntity.ok().body(players);
+//    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponsePlayerDto> findById(@PathVariable String id) {
-        return ResponseEntity.ok().body(findPlayerByIdUseCase.findById(UUID.fromString(id)));
+    public ResponseEntity<ResponsePlayerDto> findById(@PathVariable UUID id, JwtAuthenticationToken token) {
+        UUID authenticatedUserId = UUID.fromString(token.getName());
+
+        return ResponseEntity.ok().body(findPlayerByIdUseCase.findById(id, authenticatedUserId));
     }
 }
