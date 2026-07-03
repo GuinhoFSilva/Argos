@@ -1,6 +1,7 @@
 package guinho.olympus.core.integration;
 
 import guinho.olympus.ArgosApplicaiton;
+import guinho.olympus.infrastructure.security.BCryptPasswordHasherAdapter;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;

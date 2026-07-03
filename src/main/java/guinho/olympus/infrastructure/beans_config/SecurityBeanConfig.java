@@ -14,8 +14,8 @@ public class SecurityBeanConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public PasswordHasher passwordHasher(BCryptPasswordEncoder encoder) {
-        return new BCryptPasswordHasherAdapter(encoder);
-    }
+//    @Bean
+//    public PasswordHasher passwordHasher(BCryptPasswordEncoder encoder) {
+//        return new BCryptPasswordHasherAdapter(encoder);
+//    }
 }
