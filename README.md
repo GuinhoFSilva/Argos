@@ -217,3 +217,13 @@ Retornar os dados do jogador autenticado.
 - O JWT é obrigatório.
 - O token deve estar válido e dentro do prazo de expiração.
 - Apenas o próprio jogador autenticado pode acessar seus dados.
+
+---
+
+# Roadmap V2
+- Adicionar campo role (player e admin)
+- Adicionar campo Rank
+- Implementar autorização com base nas roles
+- Validar acesso aos endpoints protegidos
+- Implementar refresh token
+- Centralizar autenticação no Spring Security 
