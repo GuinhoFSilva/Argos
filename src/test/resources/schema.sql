@@ -3,6 +3,7 @@ CREATE TABLE players (
     nickname VARCHAR(20),
     email VARCHAR(255),
     password_hash VARCHAR(255),
+    role VARCHAR(20),
     created_at DATETIME,
     updated_at DATETIME
 );

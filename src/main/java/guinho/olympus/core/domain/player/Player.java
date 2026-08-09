@@ -3,6 +3,7 @@ package guinho.olympus.core.domain.player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
+import guinho.olympus.core.domain.player.valueobject.Role;
 import guinho.olympus.core.domain.shared.UnchangedFieldException;
 
 import java.time.LocalDateTime;
@@ -12,37 +13,39 @@ public class Player {
     private final UUID id;
     private Nickname nickname;
     private Email email;
+    private Role role;
     private PasswordHash passwordHash;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private Player(UUID id, Nickname nickname, Email email, PasswordHash passwordHash, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private Player(UUID id, Nickname nickname, Email email, PasswordHash passwordHash, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.passwordHash = passwordHash;
+        this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public static Player create( Nickname nickname, Email email, PasswordHash passwordHash) {
-        return new Player(UUID.randomUUID(), nickname, email, passwordHash, LocalDateTime.now(), LocalDateTime.now());
+    public static Player create(Nickname nickname, Email email, PasswordHash passwordHash, Role role) {
+        return new Player(UUID.randomUUID(), nickname, email, passwordHash, role, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public static Player reconstitute(UUID id, Nickname nickname, Email email, PasswordHash passwordHash, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        return new Player(id, nickname, email, passwordHash, createdAt, updatedAt);
+    public static Player reconstitute(UUID id, Nickname nickname, Email email, PasswordHash passwordHash, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        return new Player(id, nickname, email, passwordHash, role, createdAt, updatedAt);
     }
 
     public void changeEmail(Email email) {
-        if(email.getValue().equalsIgnoreCase(this.email.getValue())){
+        if (email.getValue().equalsIgnoreCase(this.email.getValue())) {
             throw new UnchangedFieldException("The new email must be different from the current email");
         }
         this.email = email;
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void renameTo(Nickname nickname){
-        if(nickname.getValue().equalsIgnoreCase(this.nickname.getValue())){
+    public void renameTo(Nickname nickname) {
+        if (nickname.getValue().equalsIgnoreCase(this.nickname.getValue())) {
             throw new UnchangedFieldException("The new nickname must be different from the current nickname");
         }
         this.nickname = nickname;
@@ -65,6 +68,10 @@ public class Player {
         return passwordHash;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -79,6 +86,7 @@ public class Player {
                 "id=" + id +
                 ", nickname=" + nickname +
                 ", email=" + email +
+                ", role=" + role +
                 ", passwordHash=" + passwordHash +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

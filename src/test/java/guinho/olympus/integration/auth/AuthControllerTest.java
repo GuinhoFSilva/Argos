@@ -1,4 +1,4 @@
-package guinho.olympus.core.integration.auth;
+package guinho.olympus.integration.auth;
 
 import guinho.olympus.core.application.usecase.player.dto.CreatePlayerDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
@@ -6,19 +6,17 @@ import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
-import guinho.olympus.core.integration.IntegrationTest;
+import guinho.olympus.core.domain.player.valueobject.Role;
+import guinho.olympus.integration.IntegrationTest;
 import guinho.olympus.infrastructure.persistence.JdbcPlayerRepository;
 import guinho.olympus.infrastructure.security.BCryptPasswordHasherAdapter;
-import guinho.olympus.infrastructure.security.JwtTokenProvider;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import org.testcontainers.shaded.org.checkerframework.checker.units.qual.C;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,7 +39,7 @@ public class AuthControllerTest {
     class RegisterPlayer {
         @Test
         public void shouldRegisterANewPlayer() throws Exception {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "StrongPassword!123");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "member", "StrongPassword!123");
             ObjectMapper objectMapper = new ObjectMapper();
 
             mockMvc.perform(post("/v1/auth/register")
@@ -52,6 +50,7 @@ public class AuthControllerTest {
                     .andExpect(jsonPath("$.id").isNotEmpty())
                     .andExpect(jsonPath("$.nickname").value(request.nickname()))
                     .andExpect(jsonPath("$.email").value(request.email()))
+                    .andExpect(jsonPath("$.role").value(request.role()))
                     .andExpect(jsonPath("$.createdAt").isNotEmpty())
                     .andExpect(jsonPath("$.updatedAt").isNotEmpty());
         }
@@ -59,11 +58,11 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturnConflictWhenEmailAlreadyExists() throws Exception {
-        Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("Password-hash"));
+        Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("Password-hash"), Role.of("member"));
 
         repository.save(player);
 
-        CreatePlayerDto request = new CreatePlayerDto("GenericNickname", "email@test.com", "StrongPassword!123");
+        CreatePlayerDto request = new CreatePlayerDto("GenericNickname", "email@test.com", "member", "StrongPassword!123");
         ObjectMapper objectMapper = new ObjectMapper();
 
         mockMvc.perform(post("/v1/auth/register")
@@ -75,11 +74,11 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturnConflictWhenNicknameAlreadyExists() throws Exception {
-        Player player = Player.create(Nickname.of("NicknameExists"), Email.of("email@test.com"), PasswordHash.of("Password-hash"));
+        Player player = Player.create(Nickname.of("NicknameExists"), Email.of("email@test.com"), PasswordHash.of("Password-hash"), Role.of("member"));
 
         repository.save(player);
 
-        CreatePlayerDto request = new CreatePlayerDto("NicknameExists", "email@test.com", "StrongPassword!123");
+        CreatePlayerDto request = new CreatePlayerDto("NicknameExists", "email@test.com", "member", "StrongPassword!123");
         ObjectMapper objectMapper = new ObjectMapper();
 
         mockMvc.perform(post("/v1/auth/register")
@@ -93,7 +92,7 @@ public class AuthControllerTest {
     class LoginPlayer {
         @Test
         public void shouldLoginPlayerWithSuccess() throws Exception {
-            Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of(hasher.hash("StrongPassword!123")));
+            Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of(hasher.hash("StrongPassword!123")), Role.of("member"));
 
             repository.save(player);
 
@@ -110,7 +109,7 @@ public class AuthControllerTest {
 
         @Test
         public void shouldReturnConflictWhenEmailIsWrong() throws Exception {
-            Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of(hasher.hash("StrongPassword!123")));
+            Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of(hasher.hash("StrongPassword!123")), Role.of("member"));
 
             repository.save(player);
 
@@ -126,7 +125,7 @@ public class AuthControllerTest {
 
         @Test
         public void shouldReturnConflictWhenPasswordIsWrong() throws Exception {
-            Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of(hasher.hash("StrongPassword!123")));
+            Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of(hasher.hash("StrongPassword!123")), Role.of("member"));
 
             repository.save(player);
 

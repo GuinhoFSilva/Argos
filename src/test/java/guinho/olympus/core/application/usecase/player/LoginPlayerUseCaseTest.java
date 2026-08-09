@@ -8,10 +8,7 @@ import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginResponseDto;
 import guinho.olympus.core.application.usecase.player.shared.exception.InvalidCredentialsException;
 import guinho.olympus.core.domain.player.Player;
-import guinho.olympus.core.domain.player.valueobject.Email;
-import guinho.olympus.core.domain.player.valueobject.Nickname;
-import guinho.olympus.core.domain.player.valueobject.Password;
-import guinho.olympus.core.domain.player.valueobject.PasswordHash;
+import guinho.olympus.core.domain.player.valueobject.*;
 import guinho.olympus.core.domain.shared.InvalidArgumentException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,7 +41,7 @@ class LoginPlayerUseCaseTest {
         @Test
         void shouldAuthenticatePlayerWhenCredentialsAreValid() {
             LoginInputDto request = new LoginInputDto("email@test.com", "Testing!123");
-            Player player = Player.reconstitute(UUID.randomUUID(), Nickname.of("nickname"), Email.of(request.email()), PasswordHash.of(request.password()), LocalDateTime.now(), LocalDateTime.now());
+            Player player = Player.reconstitute(UUID.randomUUID(), Nickname.of("nickname"), Email.of(request.email()), PasswordHash.of(request.password()), Role.of("member"), LocalDateTime.now(), LocalDateTime.now());
 
             Mockito.when(queryService.findByEmail(Email.of(request.email()))).thenReturn(Optional.of(player));
 
@@ -79,7 +76,7 @@ class LoginPlayerUseCaseTest {
         @Test
         public void shouldThrowInvalidCredentialsExceptionWhenPasswordIsIncorrect() {
             LoginInputDto request = new LoginInputDto("email@test.com", "Testing!123");
-            Player player = Player.reconstitute(UUID.randomUUID(), Nickname.of("nickname"), Email.of(request.email()), PasswordHash.of("Testing!321"), LocalDateTime.now(), LocalDateTime.now());
+            Player player = Player.reconstitute(UUID.randomUUID(), Nickname.of("nickname"), Email.of(request.email()), PasswordHash.of("Testing!321"), Role.of("member"), LocalDateTime.now(), LocalDateTime.now());
 
             Mockito.when(queryService.findByEmail(Email.of(request.email()))).thenReturn(Optional.of(player));
             Mockito.when(hasher.verify(request.password(), player.getPasswordHash().getValue())).thenReturn(false);

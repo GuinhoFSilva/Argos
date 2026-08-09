@@ -1,10 +1,11 @@
-package guinho.olympus.core.integration.player;
+package guinho.olympus.integration.player;
 
 import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
-import guinho.olympus.core.integration.IntegrationTest;
+import guinho.olympus.core.domain.player.valueobject.Role;
+import guinho.olympus.integration.IntegrationTest;
 import guinho.olympus.infrastructure.persistence.JdbcPlayerRepository;
 import guinho.olympus.infrastructure.security.JwtTokenProvider;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldReturnPlayerByIdWhenAuthenticated() throws Exception {
-        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"));
+        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("member"));
 
         Player saved = repository.save(player);
 
@@ -48,7 +49,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldReturnForbiddenWhenAccessingAnotherPlayer() throws Exception {
-        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"));
+        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("member"));
 
         Player saved = repository.save(player);
 
@@ -61,7 +62,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldReturnUnauthorizedWhenTokenIsMissing() throws Exception {
-        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"));
+        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("member"));
 
         Player saved = repository.save(player);
 
@@ -72,7 +73,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldReturnUnauthorizedWhenTokenIsInvalid() throws Exception {
-        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"));
+        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("member"));
 
         Player saved = repository.save(player);
 
@@ -83,7 +84,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldReturnNotFoundWhenPlayerDoesNotExist() throws Exception {
-        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"));
+        Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("member"));
 
         String token = tokenProvider.generateToken(repository.save(player).getId());
 

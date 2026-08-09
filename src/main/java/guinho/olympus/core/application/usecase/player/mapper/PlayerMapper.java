@@ -15,6 +15,7 @@ public class PlayerMapper {
                 entity.getId(),
                 entity.getNickname().getValue(),
                 entity.getEmail().getValue(),
+                entity.getRole().getValue(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );

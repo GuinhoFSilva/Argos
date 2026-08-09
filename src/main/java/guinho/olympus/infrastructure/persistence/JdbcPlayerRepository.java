@@ -7,6 +7,7 @@ import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
+import guinho.olympus.core.domain.player.valueobject.Role;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Repository
 public class JdbcPlayerRepository implements PlayerQuery, PlayerMutation {
     private final JdbcTemplate jdbcTemplate;
-    private static final String SELECT_PLAYER = "SELECT id, nickname, email, password_hash, created_at, updated_at FROM players";
+    private static final String SELECT_PLAYER = "SELECT id, nickname, email, password_hash, role, created_at, updated_at FROM players";
 
     public JdbcPlayerRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -29,13 +30,14 @@ public class JdbcPlayerRepository implements PlayerQuery, PlayerMutation {
             Nickname.of(rs.getString("nickname")),
             Email.of(rs.getString("email")),
             PasswordHash.of(rs.getString("password_hash")),
+            Role.of(rs.getString("role")),
             rs.getTimestamp("created_at").toLocalDateTime(),
             rs.getTimestamp("updated_at").toLocalDateTime()
     ));
 
     @Override
     public Player save(Player player) {
-        jdbcTemplate.update("INSERT INTO players (id, nickname, email, password_hash, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", player.getId().toString(), player.getNickname().getValue(), player.getEmail().getValue(), player.getPasswordHash().getValue(), player.getCreatedAt(), player.getUpdatedAt());
+        jdbcTemplate.update("INSERT INTO players (id, nickname, email, password_hash, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)", player.getId().toString(), player.getNickname().getValue(), player.getEmail().getValue(), player.getPasswordHash().getValue(), player.getRole().getValue(), player.getCreatedAt(), player.getUpdatedAt());
         return player;
     }
 

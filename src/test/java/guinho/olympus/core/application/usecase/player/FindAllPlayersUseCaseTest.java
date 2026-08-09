@@ -6,6 +6,7 @@ import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
+import guinho.olympus.core.domain.player.valueobject.Role;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,7 @@ class FindAllPlayersUseCaseTest {
     class FindAll {
         @Test
         public void shouldFindAllPlayersWithSuccess() {
-            List<Player> players = List.of(Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password")));
+            List<Player> players = List.of(Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("member")));
 
             Mockito.when(queryService.findAll()).thenReturn(players);
             List<ResponsePlayerDto> response = findPlayerUseCase.findAll();

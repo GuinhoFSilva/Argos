@@ -8,6 +8,7 @@ import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
+import guinho.olympus.core.domain.player.valueobject.Role;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +36,7 @@ class FindPlayerByIdUseCaseTest {
         @Test
         public void shouldFindAPlayerByIdWithSuccess() {
             UUID id = UUID.randomUUID();
-            Player player = Player.reconstitute(id, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), LocalDateTime.now(), LocalDateTime.now());
+            Player player = Player.reconstitute(id, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("member"), LocalDateTime.now(), LocalDateTime.now());
 
             Mockito.when(queryService.findById(id)).thenReturn(Optional.of(player));
 
@@ -59,7 +60,7 @@ class FindPlayerByIdUseCaseTest {
         public void shouldThrowPlayerAccessDeniedExceptionWhenIdsDoNotMatch() {
             UUID playerId = UUID.randomUUID();
             UUID userId = UUID.randomUUID();
-            Player player = Player.reconstitute(playerId, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), LocalDateTime.now(), LocalDateTime.now());
+            Player player = Player.reconstitute(playerId, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("member"), LocalDateTime.now(), LocalDateTime.now());
 
             Mockito.when(queryService.findById(playerId)).thenReturn(Optional.of(player));
 

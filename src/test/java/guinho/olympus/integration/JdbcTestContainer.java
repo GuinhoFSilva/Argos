@@ -1,4 +1,4 @@
-package guinho.olympus.core.integration;
+package guinho.olympus.integration;
 
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

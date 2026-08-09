@@ -9,10 +9,7 @@ import guinho.olympus.core.application.usecase.player.mapper.PlayerMapper;
 import guinho.olympus.core.application.usecase.player.shared.exception.EmailAlreadyExistsException;
 import guinho.olympus.core.application.usecase.player.shared.exception.NicknameAlreadyExistsException;
 import guinho.olympus.core.domain.player.Player;
-import guinho.olympus.core.domain.player.valueobject.Email;
-import guinho.olympus.core.domain.player.valueobject.Nickname;
-import guinho.olympus.core.domain.player.valueobject.Password;
-import guinho.olympus.core.domain.player.valueobject.PasswordHash;
+import guinho.olympus.core.domain.player.valueobject.*;
 
 public class RegisterPlayerUseCase {
     private final PlayerMutation mutationService;
@@ -29,6 +26,8 @@ public class RegisterPlayerUseCase {
         Password password = Password.of(command.password());
         Nickname nickname = Nickname.of(command.nickname());
         Email email = Email.of(command.email());
+        Role role = Role.of(command.role());
+
         boolean emailExists = queryService.emailExists(email);
 
         if(emailExists) throw new EmailAlreadyExistsException("Email already exists.");
@@ -42,7 +41,8 @@ public class RegisterPlayerUseCase {
         Player newPlayer = Player.create(
                 nickname,
                 email,
-                PasswordHash.of(passwordHash)
+                PasswordHash.of(passwordHash),
+                role
         );
 
         Player savedPlayer = mutationService.save(newPlayer);
