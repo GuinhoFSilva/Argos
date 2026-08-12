@@ -1,7 +1,9 @@
 package guinho.olympus.core.application.usecase.player;
 
 import guinho.olympus.core.application.repository.player.PlayerQuery;
+import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
+import guinho.olympus.core.application.usecase.player.shared.exception.PlayerAccessDeniedException;
 import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
@@ -17,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,10 +35,12 @@ class FindAllPlayersUseCaseTest {
     class FindAll {
         @Test
         public void shouldFindAllPlayersWithSuccess() {
+            AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
+
             List<Player> players = List.of(Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("member")));
 
             Mockito.when(queryService.findAll()).thenReturn(players);
-            List<ResponsePlayerDto> response = findPlayerUseCase.findAll();
+            List<ResponsePlayerDto> response = findPlayerUseCase.findAll(authenticatedPlayer);
 
             assertNotNull(response);
             assertEquals(1, response.size());
@@ -45,12 +50,20 @@ class FindAllPlayersUseCaseTest {
 
         @Test
         public void shouldReturnEmptyListWhenNoPlayersExist() {
+            AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
             Mockito.when(queryService.findAll()).thenReturn(List.of());
 
-            List<ResponsePlayerDto> response = findPlayerUseCase.findAll();
+            List<ResponsePlayerDto> response = findPlayerUseCase.findAll(authenticatedPlayer);
             assertNotNull(response);
             assertTrue(response.isEmpty());
             Mockito.verify(queryService).findAll();
+        }
+
+        @Test
+        public void shouldThrowExceptionWhenPlayerIsNotAdmin() {
+            AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("PLAYER"));
+            PlayerAccessDeniedException exception = assertThrows(PlayerAccessDeniedException.class, () -> findPlayerUseCase.findAll(authenticatedPlayer));
+            assertEquals("You do not have permission to access this player", exception.getMessage());
         }
     }
 

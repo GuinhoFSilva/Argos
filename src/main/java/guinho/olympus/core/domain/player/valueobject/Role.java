@@ -25,6 +25,10 @@ public class Role {
         return value != null && !value.isBlank();
     }
 
+    public boolean isAdmin(){
+        return "ADMIN".equals(value);
+    }
+
     public String getValue() {
         return value;
     }

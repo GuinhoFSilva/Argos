@@ -1,8 +1,11 @@
 package guinho.olympus.infrastructure.web.rest.player.controller;
 
+import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.FindAllPlayersUseCase;
 import guinho.olympus.core.application.usecase.player.FindPlayerByIdUseCase;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
+import guinho.olympus.core.domain.player.valueobject.Role;
+import guinho.olympus.infrastructure.factory.AuthenticatedPlayerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -15,27 +18,29 @@ import java.util.UUID;
 public class PlayerController {
     private final FindPlayerByIdUseCase findPlayerByIdUseCase;
     private final FindAllPlayersUseCase findAllPlayersUseCase;
+    private final AuthenticatedPlayerFactory authenticatedPlayerFactory;
 
-    public PlayerController(FindPlayerByIdUseCase findPlayerByIdUseCase, FindAllPlayersUseCase findAllPlayersUseCase) {
+    public PlayerController(FindPlayerByIdUseCase findPlayerByIdUseCase, FindAllPlayersUseCase findAllPlayersUseCase, AuthenticatedPlayerFactory authenticatedPlayerFactory) {
         this.findPlayerByIdUseCase = findPlayerByIdUseCase;
         this.findAllPlayersUseCase = findAllPlayersUseCase;
+        this.authenticatedPlayerFactory = authenticatedPlayerFactory;
     }
 
-//    @GetMapping  // AINDA NÃO PROTEGIDO
-//    public ResponseEntity<List<ResponsePlayerDto>> findAll() {
-//        List<ResponsePlayerDto> players = findAllPlayersUseCase.findAll();
-//
-//        if(players.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//
-//        return ResponseEntity.ok().body(players);
-//    }
+    @GetMapping
+    public ResponseEntity<List<ResponsePlayerDto>> findAll(JwtAuthenticationToken token) {
+        AuthenticatedPlayer authenticatedPlayer = authenticatedPlayerFactory.from(token);
+        List<ResponsePlayerDto> players = findAllPlayersUseCase.findAll(authenticatedPlayer);
+
+        if (players.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok().body(players);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponsePlayerDto> findById(@PathVariable UUID id, JwtAuthenticationToken token) {
-        UUID authenticatedUserId = UUID.fromString(token.getName());
-
-        return ResponseEntity.ok().body(findPlayerByIdUseCase.findById(id, authenticatedUserId));
+        AuthenticatedPlayer authenticatedPlayer = authenticatedPlayerFactory.from(token);
+        return ResponseEntity.ok().body(findPlayerByIdUseCase.findById(id, authenticatedPlayer));
     }
 }

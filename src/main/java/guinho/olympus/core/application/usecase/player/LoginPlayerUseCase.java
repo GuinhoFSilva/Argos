@@ -3,6 +3,7 @@ package guinho.olympus.core.application.usecase.player;
 import guinho.olympus.core.application.abstractions.PasswordHasher;
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
+import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginResponseDto;
 import guinho.olympus.core.application.usecase.player.shared.exception.InvalidCredentialsException;
@@ -33,7 +34,9 @@ public class LoginPlayerUseCase {
             throw new InvalidCredentialsException();
         }
 
-        String token = tokenProvider.generateToken(player.getId());
+        AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(player.getId(), player.getRole());
+
+        String token = tokenProvider.generateToken(authenticatedPlayer);
 
         return new LoginResponseDto(token);
     }

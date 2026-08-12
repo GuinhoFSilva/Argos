@@ -1,6 +1,8 @@
 package guinho.olympus.infrastructure.security;
 
 import guinho.olympus.core.application.abstractions.TokenProvider;
+import guinho.olympus.core.application.security.AuthenticatedPlayer;
+import guinho.olympus.core.domain.player.valueobject.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -26,12 +28,26 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public String generateToken(UUID userId) {
+    public String generateToken(AuthenticatedPlayer authenticatedPlayer) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         Date exp = new Date(nowMillis + 3600000);
+        UUID playerId = authenticatedPlayer.playerId();
+        Role playerRole = authenticatedPlayer.role();
 
-        return Jwts.builder().subject(userId.toString()).signWith(signingKey, Jwts.SIG.HS256).issuedAt(now).expiration(exp).compact();
+        return Jwts.builder()
+                .subject(playerId.toString())
+                .claim("role", playerRole.getValue())
+                .signWith(signingKey, Jwts.SIG.HS256)
+                .issuedAt(now)
+                .expiration(exp)
+                .compact();
+    }
+
+    @Override
+    public Role getRole(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        return Role.of(claims.get("role", String.class));
     }
 
     @Override

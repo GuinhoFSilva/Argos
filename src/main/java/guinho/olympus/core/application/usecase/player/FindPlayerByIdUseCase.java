@@ -1,7 +1,7 @@
 package guinho.olympus.core.application.usecase.player;
 
-import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
+import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
 import guinho.olympus.core.application.usecase.player.mapper.PlayerMapper;
 import guinho.olympus.core.application.usecase.player.shared.exception.PlayerAccessDeniedException;
@@ -17,12 +17,12 @@ public class FindPlayerByIdUseCase {
         this.queryService = queryService;
     }
 
-    public ResponsePlayerDto findById(UUID id, UUID requestId) {
+    public ResponsePlayerDto findById(UUID id, AuthenticatedPlayer authenticatedPlayer) {
         Player player = queryService.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Player Not Found")
         );
 
-        if(!player.getId().equals(requestId)) {
+        if(!player.getId().equals(authenticatedPlayer.playerId()) && !authenticatedPlayer.role().isAdmin()) {
             throw new PlayerAccessDeniedException();
         }
 

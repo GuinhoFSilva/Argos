@@ -3,6 +3,7 @@ package guinho.olympus.core.application.usecase.player;
 import guinho.olympus.core.application.abstractions.PasswordHasher;
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
+import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.dto.CreatePlayerDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginResponseDto;
@@ -42,18 +43,19 @@ class LoginPlayerUseCaseTest {
         void shouldAuthenticatePlayerWhenCredentialsAreValid() {
             LoginInputDto request = new LoginInputDto("email@test.com", "Testing!123");
             Player player = Player.reconstitute(UUID.randomUUID(), Nickname.of("nickname"), Email.of(request.email()), PasswordHash.of(request.password()), Role.of("member"), LocalDateTime.now(), LocalDateTime.now());
+            AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(player.getId(), player.getRole());
 
             Mockito.when(queryService.findByEmail(Email.of(request.email()))).thenReturn(Optional.of(player));
 
             Mockito.when(hasher.verify(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
 
-            Mockito.when(tokenProvider.generateToken(Mockito.any(UUID.class))).thenReturn("token");
+            Mockito.when(tokenProvider.generateToken(Mockito.any(AuthenticatedPlayer.class))).thenReturn("token");
 
             LoginResponseDto response = loginUseCase.execute(request);
 
             assertNotNull(response);
             Mockito.verify(queryService).findByEmail(Email.of(request.email()));
-            Mockito.verify(tokenProvider).generateToken(player.getId());
+            Mockito.verify(tokenProvider).generateToken(authenticatedPlayer);
             Mockito.verify(hasher).verify(request.password(), player.getPasswordHash().getValue());
         }
     }
