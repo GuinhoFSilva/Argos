@@ -11,6 +11,7 @@ import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
 import guinho.olympus.core.domain.player.valueobject.Role;
+import guinho.olympus.core.domain.shared.UnchangedFieldException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -82,6 +83,21 @@ public class PromotePlayerToAdminUseCaseTest {
             Mockito.verifyNoInteractions(playerQuery);
             Mockito.verifyNoInteractions(playerMutation);
             assertEquals("You don't have permission to do this", exception.getMessage());
+        }
+
+        @Test
+        public void shouldThrowUnchangedFieldExceptionWhenPlayerAlreadyIsAnAdmin() {
+            UUID id = UUID.randomUUID();
+            Player player = Player.reconstitute(id, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("ADMIN"), LocalDateTime.now(), LocalDateTime.now());
+            AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
+
+            Mockito.when(playerQuery.findById(player.getId())).thenReturn(Optional.of(player));
+
+            Exception exception = assertThrows(UnchangedFieldException.class, () -> promoteUseCase.execute(id, authenticatedPlayer));
+
+            Mockito.verify(playerQuery).findById(id);
+            Mockito.verifyNoInteractions(playerMutation);
+            assertEquals("This user is already an admin", exception.getMessage());
         }
     }
 

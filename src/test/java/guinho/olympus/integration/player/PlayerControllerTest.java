@@ -198,6 +198,21 @@ public class PlayerControllerTest {
         }
 
         @Test
+        public void shouldReturnConflictWhenPlayerItsAlreadyAnAdmin() throws Exception {
+            AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
+
+            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("ADMIN"));
+
+            Player saved = repository.save(player);
+
+            String token = tokenProvider.generateToken(authenticatedPlayer);
+
+            mockMvc.perform(
+                    patch("/v1/players/" + saved.getId() + "/promote").header("Authorization", "Bearer " + token))
+                    .andExpect(status().isConflict());
+        }
+
+        @Test
         public void shouldReturnForbiddenWhenItsNotAdmin() throws Exception {
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("PLAYER"));
             String token = tokenProvider.generateToken(authenticatedPlayer);
