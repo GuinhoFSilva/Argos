@@ -221,9 +221,9 @@ Retornar os dados do jogador autenticado.
 ---
 
 # Roadmap V2
-- Adicionar campo role (player e admin)
+- Adicionar campo role (player e admin)✅
+- Implementar autorização com base nas roles✅
+- Validar acesso aos endpoints protegidos✅
 - Adicionar campo Rank
-- Implementar autorização com base nas roles
-- Validar acesso aos endpoints protegidos
 - Implementar refresh token
 - Centralizar autenticação no Spring Security 
