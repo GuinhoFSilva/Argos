@@ -51,6 +51,16 @@ public class JdbcPlayerRepository implements PlayerQuery, PlayerMutation {
     }
 
     @Override
+    public Player changeRole(Player player) {
+        int rows = jdbcTemplate.update("UPDATE players SET role = ?, updated_at = ? WHERE id = ?", player.getRole().getValue(), player.getUpdatedAt(), player.getId().toString());
+
+        if (rows == 0) throw new ResourceNotFoundException("Player Not Found");
+
+
+        return player;
+    }
+
+    @Override
     public List<Player> findAll() {
         return jdbcTemplate.query(SELECT_PLAYER, playerRowMapper);
     }

@@ -52,6 +52,15 @@ public class Player {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void promoteToAdmin(Role role) {
+        if (role.getValue().equalsIgnoreCase(this.role.getValue())) {
+            throw new UnchangedFieldException("This user is already an admin");
+        }
+
+        this.role = role;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public UUID getId() {
         return id;
     }

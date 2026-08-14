@@ -26,7 +26,6 @@ public class RegisterPlayerUseCase {
         Password password = Password.of(command.password());
         Nickname nickname = Nickname.of(command.nickname());
         Email email = Email.of(command.email());
-        Role role = Role.of(command.role());
 
         boolean emailExists = queryService.emailExists(email);
 
@@ -42,7 +41,7 @@ public class RegisterPlayerUseCase {
                 nickname,
                 email,
                 PasswordHash.of(passwordHash),
-                role
+                Role.of("PLAYER")
         );
 
         Player savedPlayer = mutationService.save(newPlayer);

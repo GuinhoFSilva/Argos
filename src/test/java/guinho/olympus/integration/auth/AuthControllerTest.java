@@ -39,7 +39,7 @@ public class AuthControllerTest {
     class RegisterPlayer {
         @Test
         public void shouldRegisterANewPlayer() throws Exception {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "member", "StrongPassword!123");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "StrongPassword!123");
             ObjectMapper objectMapper = new ObjectMapper();
 
             mockMvc.perform(post("/v1/auth/register")
@@ -50,7 +50,7 @@ public class AuthControllerTest {
                     .andExpect(jsonPath("$.id").isNotEmpty())
                     .andExpect(jsonPath("$.nickname").value(request.nickname()))
                     .andExpect(jsonPath("$.email").value(request.email()))
-                    .andExpect(jsonPath("$.role").value(request.role()))
+                    .andExpect(jsonPath("$.role").value("PLAYER"))
                     .andExpect(jsonPath("$.createdAt").isNotEmpty())
                     .andExpect(jsonPath("$.updatedAt").isNotEmpty());
         }
@@ -62,7 +62,7 @@ public class AuthControllerTest {
 
         repository.save(player);
 
-        CreatePlayerDto request = new CreatePlayerDto("GenericNickname", "email@test.com", "member", "StrongPassword!123");
+        CreatePlayerDto request = new CreatePlayerDto("GenericNickname", "email@test.com", "StrongPassword!123");
         ObjectMapper objectMapper = new ObjectMapper();
 
         mockMvc.perform(post("/v1/auth/register")
@@ -78,7 +78,7 @@ public class AuthControllerTest {
 
         repository.save(player);
 
-        CreatePlayerDto request = new CreatePlayerDto("NicknameExists", "email@test.com", "member", "StrongPassword!123");
+        CreatePlayerDto request = new CreatePlayerDto("NicknameExists", "email@test.com", "StrongPassword!123");
         ObjectMapper objectMapper = new ObjectMapper();
 
         mockMvc.perform(post("/v1/auth/register")

@@ -72,6 +72,12 @@ public class RestAdvice {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
+    @ExceptionHandler(PermissionException.class)
+    public ResponseEntity<ApiError> handlePlayerAccessDeniedException(PermissionException ex) {
+        var error = ApiError.of(ex.getMessage(), HttpStatus.FORBIDDEN.value());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
         var error = ApiError.of("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR.value());

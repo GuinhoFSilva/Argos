@@ -39,13 +39,13 @@ class RegisterPlayerUseCaseTest {
     class RegisterPlayer {
         @Test
         public void shouldRegisterAPlayerWithSuccess() {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "member", "Testing!123");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "Testing!123");
 
             Mockito.when(queryService.emailExists(Email.of(request.email()))).thenReturn(false);
             Mockito.when(queryService.nicknameExists(Nickname.of(request.nickname()))).thenReturn(false);
             Mockito.when(hasher.hash(Mockito.anyString())).thenReturn("hashed-password");
 
-            Player player = Player.create(Nickname.of(request.nickname()), Email.of(request.email()), PasswordHash.of("hashed-password"), Role.of("member"));
+            Player player = Player.create(Nickname.of(request.nickname()), Email.of(request.email()), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
 
             Mockito.when(mutationService.save(Mockito.any(Player.class))).thenReturn(player);
 
@@ -54,6 +54,7 @@ class RegisterPlayerUseCaseTest {
             assertNotNull(response);
             assertEquals(request.nickname(), response.nickname());
             assertEquals(request.email(), response.email());
+            assertEquals("PLAYER", response.role());
             Mockito.verify(queryService).emailExists(Email.of(request.email()));
             Mockito.verify(queryService).nicknameExists(Nickname.of(request.nickname()));
             Mockito.verify(hasher).hash(request.password());
@@ -65,7 +66,7 @@ class RegisterPlayerUseCaseTest {
     class Validations {
         @Test
         public void shouldThrowEmailAlreadyExistsExceptionWhenEmailAlreadyExists() {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "member", "Testing!123");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "Testing!123");
 
             Mockito.when(queryService.emailExists(Email.of(request.email()))).thenReturn(true);
 
@@ -80,7 +81,7 @@ class RegisterPlayerUseCaseTest {
 
         @Test
         public void shouldThrowNicknameAlreadyExistsExceptionWhenNicknameAlreadyExists() {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "member", "Testing!123");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "Testing!123");
 
             Mockito.when(queryService.emailExists(Email.of(request.email()))).thenReturn(false);
             Mockito.when(queryService.nicknameExists(Nickname.of(request.nickname()))).thenReturn(true);
@@ -95,7 +96,7 @@ class RegisterPlayerUseCaseTest {
 
         @Test
         public void shouldThrowInvalidArgumentExceptionWhenEmailIsInvalid() {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "invalid", "member", "Testing!123");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "invalid", "Testing!123");
 
             Exception exception = assertThrows(InvalidArgumentException.class, () -> registerUseCase.execute(request));
 
@@ -107,7 +108,7 @@ class RegisterPlayerUseCaseTest {
 
         @Test
         public void shouldThrowInvalidArgumentExceptionWhenNicknameIsInvalid() {
-            CreatePlayerDto request = new CreatePlayerDto("", "email@test.com", "member", "Testing!123");
+            CreatePlayerDto request = new CreatePlayerDto("", "email@test.com", "Testing!123");
 
             Exception exception = assertThrows(InvalidArgumentException.class, () -> registerUseCase.execute(request));
 
@@ -119,7 +120,7 @@ class RegisterPlayerUseCaseTest {
 
         @Test
         public void shouldThrowInvalidArgumentExceptionWhenPasswordIsInvalid() {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "member", "Testing");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "Testing");
 
             Exception exception = assertThrows(InvalidArgumentException.class, () -> registerUseCase.execute(request));
 
@@ -131,7 +132,7 @@ class RegisterPlayerUseCaseTest {
 
         @Test
         public void shouldThrowInvalidArgumentExceptionWhenPasswordHashIsInvalid() {
-            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "member", "Testing!123");
+            CreatePlayerDto request = new CreatePlayerDto("nickname", "email@test.com", "Testing!123");
 
             Mockito.when(queryService.emailExists(Mockito.any())).thenReturn(false);
             Mockito.when(queryService.nicknameExists(Mockito.any())).thenReturn(false);

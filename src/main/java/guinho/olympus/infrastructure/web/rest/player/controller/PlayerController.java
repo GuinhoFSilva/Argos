@@ -3,6 +3,7 @@ package guinho.olympus.infrastructure.web.rest.player.controller;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.FindAllPlayersUseCase;
 import guinho.olympus.core.application.usecase.player.FindPlayerByIdUseCase;
+import guinho.olympus.core.application.usecase.player.PromotePlayetToAdminUseCase;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
 import guinho.olympus.core.domain.player.valueobject.Role;
 import guinho.olympus.infrastructure.factory.AuthenticatedPlayerFactory;
@@ -18,11 +19,13 @@ import java.util.UUID;
 public class PlayerController {
     private final FindPlayerByIdUseCase findPlayerByIdUseCase;
     private final FindAllPlayersUseCase findAllPlayersUseCase;
+    private final PromotePlayetToAdminUseCase promotePlayetToAdminUseCase;
     private final AuthenticatedPlayerFactory authenticatedPlayerFactory;
 
-    public PlayerController(FindPlayerByIdUseCase findPlayerByIdUseCase, FindAllPlayersUseCase findAllPlayersUseCase, AuthenticatedPlayerFactory authenticatedPlayerFactory) {
+    public PlayerController(FindPlayerByIdUseCase findPlayerByIdUseCase, FindAllPlayersUseCase findAllPlayersUseCase, PromotePlayetToAdminUseCase promotePlayetToAdminUseCase, AuthenticatedPlayerFactory authenticatedPlayerFactory) {
         this.findPlayerByIdUseCase = findPlayerByIdUseCase;
         this.findAllPlayersUseCase = findAllPlayersUseCase;
+        this.promotePlayetToAdminUseCase = promotePlayetToAdminUseCase;
         this.authenticatedPlayerFactory = authenticatedPlayerFactory;
     }
 
@@ -42,5 +45,11 @@ public class PlayerController {
     public ResponseEntity<ResponsePlayerDto> findById(@PathVariable UUID id, JwtAuthenticationToken token) {
         AuthenticatedPlayer authenticatedPlayer = authenticatedPlayerFactory.from(token);
         return ResponseEntity.ok().body(findPlayerByIdUseCase.findById(id, authenticatedPlayer));
+    }
+
+    @PatchMapping("/{id}/promote")
+    public ResponseEntity<ResponsePlayerDto> makeAdmin(@PathVariable UUID id, JwtAuthenticationToken token) {
+        AuthenticatedPlayer authenticatedPlayer = authenticatedPlayerFactory.from(token);
+        return ResponseEntity.ok().body(promotePlayetToAdminUseCase.execute(id, authenticatedPlayer));
     }
 }

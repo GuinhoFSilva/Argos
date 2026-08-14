@@ -156,12 +156,12 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                    get("/v1/players").header("Authorization", "Bearer " + token))
+                            get("/v1/players").header("Authorization", "Bearer " + token))
                     .andExpect(status().isNoContent());
         }
 
         @Test
-        public void shouldReturnForbiddenWhenItsNotAdmin() throws Exception {
+        public void shouldThrowForbiddenWhenItsNotAdmin() throws Exception {
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("PLAYER"));
 
             String token = tokenProvider.generateToken(authenticatedPlayer);
@@ -178,4 +178,41 @@ public class PlayerControllerTest {
                     .andExpect(status().isUnauthorized());
         }
     }
+
+    @Nested
+    class PromoteToAdmin {
+        @Test
+        public void shouldPromoteAPlayerToAdmin() throws Exception {
+            AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
+            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+
+            Player saved = repository.save(player);
+
+            String token = tokenProvider.generateToken(authenticatedPlayer);
+
+            mockMvc.perform(
+                            patch("/v1/players/" + saved.getId() + "/promote").header("Authorization", "Bearer " + token))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value(player.getId().toString()))
+                    .andExpect(jsonPath("$.role").value("ADMIN"));
+        }
+
+        @Test
+        public void shouldReturnForbiddenWhenItsNotAdmin() throws Exception {
+            AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("PLAYER"));
+            String token = tokenProvider.generateToken(authenticatedPlayer);
+
+            mockMvc.perform(
+                            patch("/v1/players/" + UUID.randomUUID() + "/promote").header("Authorization", "Bearer " + token))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        public void shouldReturnUnauthorizedWhenTokenIsInvalid() throws Exception {
+            mockMvc.perform(
+                            get("/v1/players/" + UUID.randomUUID() + "/promote").header("Authorization", "Bearer " + "invalid-Token"))
+                    .andExpect(status().isUnauthorized());
+        }
+    }
 }
+

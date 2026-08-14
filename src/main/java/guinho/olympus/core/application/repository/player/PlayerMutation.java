@@ -8,4 +8,6 @@ public interface PlayerMutation {
     Player save(Player player);
 
     Player update(Player player);
+
+    Player changeRole(Player player);
 }
