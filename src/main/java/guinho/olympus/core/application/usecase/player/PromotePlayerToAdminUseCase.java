@@ -12,11 +12,11 @@ import guinho.olympus.core.domain.player.valueobject.Role;
 
 import java.util.UUID;
 
-public class PromotePlayetToAdminUseCase {
+public class PromotePlayerToAdminUseCase {
     private final PlayerQuery playerQuery;
     private final PlayerMutation playerMutation;
 
-    public PromotePlayetToAdminUseCase(PlayerQuery playerQuery, PlayerMutation playerMutation) {
+    public PromotePlayerToAdminUseCase(PlayerQuery playerQuery, PlayerMutation playerMutation) {
         this.playerQuery = playerQuery;
         this.playerMutation = playerMutation;
     }

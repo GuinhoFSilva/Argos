@@ -3,9 +3,8 @@ package guinho.olympus.infrastructure.web.rest.player.controller;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.FindAllPlayersUseCase;
 import guinho.olympus.core.application.usecase.player.FindPlayerByIdUseCase;
-import guinho.olympus.core.application.usecase.player.PromotePlayetToAdminUseCase;
+import guinho.olympus.core.application.usecase.player.PromotePlayerToAdminUseCase;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
-import guinho.olympus.core.domain.player.valueobject.Role;
 import guinho.olympus.infrastructure.factory.AuthenticatedPlayerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -19,10 +18,10 @@ import java.util.UUID;
 public class PlayerController {
     private final FindPlayerByIdUseCase findPlayerByIdUseCase;
     private final FindAllPlayersUseCase findAllPlayersUseCase;
-    private final PromotePlayetToAdminUseCase promotePlayetToAdminUseCase;
+    private final PromotePlayerToAdminUseCase promotePlayetToAdminUseCase;
     private final AuthenticatedPlayerFactory authenticatedPlayerFactory;
 
-    public PlayerController(FindPlayerByIdUseCase findPlayerByIdUseCase, FindAllPlayersUseCase findAllPlayersUseCase, PromotePlayetToAdminUseCase promotePlayetToAdminUseCase, AuthenticatedPlayerFactory authenticatedPlayerFactory) {
+    public PlayerController(FindPlayerByIdUseCase findPlayerByIdUseCase, FindAllPlayersUseCase findAllPlayersUseCase, PromotePlayerToAdminUseCase promotePlayetToAdminUseCase, AuthenticatedPlayerFactory authenticatedPlayerFactory) {
         this.findPlayerByIdUseCase = findPlayerByIdUseCase;
         this.findAllPlayersUseCase = findAllPlayersUseCase;
         this.promotePlayetToAdminUseCase = promotePlayetToAdminUseCase;

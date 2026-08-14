@@ -31,8 +31,8 @@ public class PlayerBeanConfig {
     }
 
     @Bean
-    public PromotePlayetToAdminUseCase promotePlayerToAdminUseCase(JdbcPlayerRepository jdbcAdapter) {
-        return new PromotePlayetToAdminUseCase(jdbcAdapter,jdbcAdapter);
+    public PromotePlayerToAdminUseCase promotePlayerToAdminUseCase(JdbcPlayerRepository jdbcAdapter) {
+        return new PromotePlayerToAdminUseCase(jdbcAdapter,jdbcAdapter);
     }
 
 }
