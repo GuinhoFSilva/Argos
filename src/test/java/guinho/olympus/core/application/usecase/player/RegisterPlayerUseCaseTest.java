@@ -13,6 +13,7 @@ import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
 import guinho.olympus.core.domain.player.valueobject.Role;
 import guinho.olympus.core.domain.shared.InvalidArgumentException;
+import guinho.olympus.support.PlayerFactory;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +46,7 @@ class RegisterPlayerUseCaseTest {
             Mockito.when(queryService.nicknameExists(Nickname.of(request.nickname()))).thenReturn(false);
             Mockito.when(hasher.hash(Mockito.anyString())).thenReturn("hashed-password");
 
-            Player player = Player.create(Nickname.of(request.nickname()), Email.of(request.email()), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
 
             Mockito.when(mutationService.save(Mockito.any(Player.class))).thenReturn(player);
 

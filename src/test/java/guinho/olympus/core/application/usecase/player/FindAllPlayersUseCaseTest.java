@@ -9,6 +9,7 @@ import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
 import guinho.olympus.core.domain.player.valueobject.Role;
+import guinho.olympus.support.PlayerFactory;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,7 @@ class FindAllPlayersUseCaseTest {
         public void shouldFindAllPlayersWithSuccess() {
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
 
-            List<Player> players = List.of(Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("member")));
+            List<Player> players = List.of(PlayerFactory.createValidPlayer());
 
             Mockito.when(queryService.findAll()).thenReturn(players);
             List<ResponsePlayerDto> response = findPlayerUseCase.findAll(authenticatedPlayer);

@@ -11,6 +11,7 @@ import guinho.olympus.core.application.usecase.player.shared.exception.InvalidCr
 import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.*;
 import guinho.olympus.core.domain.shared.InvalidArgumentException;
+import guinho.olympus.support.PlayerFactory;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,8 @@ class LoginPlayerUseCaseTest {
         @Test
         void shouldAuthenticatePlayerWhenCredentialsAreValid() {
             LoginInputDto request = new LoginInputDto("email@test.com", "Testing!123");
-            Player player = Player.reconstitute(UUID.randomUUID(), Nickname.of("nickname"), Email.of(request.email()), PasswordHash.of(request.password()), Role.of("member"), LocalDateTime.now(), LocalDateTime.now());
+            Player player = PlayerFactory.createValidPlayer();
+
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(player.getId(), player.getRole());
 
             Mockito.when(queryService.findByEmail(Email.of(request.email()))).thenReturn(Optional.of(player));
@@ -77,8 +79,8 @@ class LoginPlayerUseCaseTest {
 
         @Test
         public void shouldThrowInvalidCredentialsExceptionWhenPasswordIsIncorrect() {
-            LoginInputDto request = new LoginInputDto("email@test.com", "Testing!123");
-            Player player = Player.reconstitute(UUID.randomUUID(), Nickname.of("nickname"), Email.of(request.email()), PasswordHash.of("Testing!321"), Role.of("member"), LocalDateTime.now(), LocalDateTime.now());
+            LoginInputDto request = new LoginInputDto("email@test.com", "Testing!321");
+            Player player = PlayerFactory.createValidPlayer();
 
             Mockito.when(queryService.findByEmail(Email.of(request.email()))).thenReturn(Optional.of(player));
             Mockito.when(hasher.verify(request.password(), player.getPasswordHash().getValue())).thenReturn(false);

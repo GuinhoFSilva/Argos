@@ -9,6 +9,7 @@ import guinho.olympus.core.application.usecase.player.mapper.PlayerMapper;
 import guinho.olympus.core.application.usecase.player.shared.exception.EmailAlreadyExistsException;
 import guinho.olympus.core.application.usecase.player.shared.exception.NicknameAlreadyExistsException;
 import guinho.olympus.core.domain.player.Player;
+import guinho.olympus.core.domain.player.enums.Rank;
 import guinho.olympus.core.domain.player.valueobject.*;
 
 public class RegisterPlayerUseCase {
@@ -40,6 +41,7 @@ public class RegisterPlayerUseCase {
         Player newPlayer = Player.create(
                 nickname,
                 email,
+                Rank.BRONZE,
                 PasswordHash.of(passwordHash),
                 Role.of("PLAYER")
         );

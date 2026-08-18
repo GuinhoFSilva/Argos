@@ -10,6 +10,7 @@ import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
 import guinho.olympus.core.domain.player.valueobject.Role;
+import guinho.olympus.support.PlayerFactory;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,7 @@ class FindPlayerByIdUseCaseTest {
         @Test
         public void shouldFindAPlayerByIdWithSuccess() {
             UUID id = UUID.randomUUID();
-            Player player = Player.reconstitute(id, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"), LocalDateTime.now(), LocalDateTime.now());
+            Player player = PlayerFactory.reconstituteValidPlayer(id);
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(id, player.getRole());
 
             Mockito.when(queryService.findById(id)).thenReturn(Optional.of(player));
@@ -51,7 +52,7 @@ class FindPlayerByIdUseCaseTest {
 
         @Test
         public void shouldFindAnotherPlayerWhenItsAdmin() {
-            Player player = Player.reconstitute(UUID.randomUUID(), Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"), LocalDateTime.now(), LocalDateTime.now());
+            Player player = PlayerFactory.createValidPlayer();
 
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
 
@@ -79,7 +80,8 @@ class FindPlayerByIdUseCaseTest {
         public void shouldThrowPlayerAccessDeniedExceptionWhenIdsDoNotMatchAndItsNotAdmin() {
             UUID playerId = UUID.randomUUID();
             UUID userId = UUID.randomUUID();
-            Player player = Player.reconstitute(playerId, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"), LocalDateTime.now(), LocalDateTime.now());
+            Player player = PlayerFactory.reconstituteValidPlayer(playerId);
+
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(userId, player.getRole());
 
             Mockito.when(queryService.findById(playerId)).thenReturn(Optional.of(player));

@@ -2,6 +2,7 @@ package guinho.olympus.integration.player;
 
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.domain.player.Player;
+import guinho.olympus.core.domain.player.enums.Rank;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
@@ -9,6 +10,7 @@ import guinho.olympus.core.domain.player.valueobject.Role;
 import guinho.olympus.integration.IntegrationTest;
 import guinho.olympus.infrastructure.persistence.JdbcPlayerRepository;
 import guinho.olympus.infrastructure.security.JwtTokenProvider;
+import guinho.olympus.support.PlayerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,7 +49,7 @@ public class PlayerControllerTest {
     class FindById {
         @Test
         public void shouldReturnPlayerByIdWhenAuthenticated() throws Exception {
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(player.getId(), player.getRole());
             Player saved = repository.save(player);
 
@@ -63,7 +65,7 @@ public class PlayerControllerTest {
 
         @Test
         public void shouldReturnAnotherPlayerWhenItsAdmin() throws Exception {
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
             Player saved = repository.save(player);
 
@@ -79,7 +81,7 @@ public class PlayerControllerTest {
 
         @Test
         public void shouldReturnForbiddenWhenAccessingAnotherPlayerAndItsNotAdmin() throws Exception {
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), player.getRole());
             Player saved = repository.save(player);
 
@@ -92,7 +94,7 @@ public class PlayerControllerTest {
 
         @Test
         public void shouldReturnUnauthorizedWhenTokenIsMissing() throws Exception {
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
 
             Player saved = repository.save(player);
 
@@ -103,7 +105,7 @@ public class PlayerControllerTest {
 
         @Test
         public void shouldReturnUnauthorizedWhenTokenIsInvalid() throws Exception {
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
 
             Player saved = repository.save(player);
 
@@ -114,7 +116,7 @@ public class PlayerControllerTest {
 
         @Test
         public void shouldReturnNotFoundWhenPlayerDoesNotExist() throws Exception {
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
             repository.save(player);
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(player.getId(), player.getRole());
             String token = tokenProvider.generateToken(authenticatedPlayer);
@@ -130,8 +132,8 @@ public class PlayerControllerTest {
     class FindAll {
         @Test
         public void shouldReturnPlayersWhenItsAdmin() throws Exception {
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
-            Player anotherPlayer = Player.create(Nickname.of("Nickname2"), Email.of("test2@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
+            Player anotherPlayer = Player.create(Nickname.of("Nickname2"), Email.of("test2@email.com"), Rank.BRONZE, PasswordHash.of("hashed-password"), Role.of("PLAYER"));
 
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
             Player savedPlayer = repository.save(player);
@@ -184,7 +186,7 @@ public class PlayerControllerTest {
         @Test
         public void shouldPromoteAPlayerToAdmin() throws Exception {
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("PLAYER"));
+            Player player = PlayerFactory.createValidPlayer();
 
             Player saved = repository.save(player);
 
@@ -201,7 +203,7 @@ public class PlayerControllerTest {
         public void shouldReturnConflictWhenPlayerItsAlreadyAnAdmin() throws Exception {
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
 
-            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), PasswordHash.of("hashed-password"), Role.of("ADMIN"));
+            Player player = Player.create(Nickname.of("Nickname"), Email.of("test@email.com"), Rank.BRONZE, PasswordHash.of("hashed-password"), Role.of("ADMIN"));
 
             Player saved = repository.save(player);
 
