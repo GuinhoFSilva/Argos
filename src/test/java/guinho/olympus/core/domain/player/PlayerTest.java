@@ -2,8 +2,6 @@ package guinho.olympus.core.domain.player;
 
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
-import guinho.olympus.core.domain.player.valueobject.PasswordHash;
-import guinho.olympus.core.domain.player.valueobject.Role;
 import guinho.olympus.core.domain.shared.UnchangedFieldException;
 import guinho.olympus.support.PlayerFactory;
 import org.junit.jupiter.api.Nested;

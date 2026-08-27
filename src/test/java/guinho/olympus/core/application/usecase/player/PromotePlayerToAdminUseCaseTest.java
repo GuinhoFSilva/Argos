@@ -7,7 +7,6 @@ import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
 import guinho.olympus.core.application.usecase.player.shared.exception.PermissionException;
 import guinho.olympus.core.application.usecase.player.shared.exception.ResourceNotFoundException;
 import guinho.olympus.core.domain.player.Player;
-import guinho.olympus.core.domain.player.enums.Rank;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
@@ -91,7 +90,7 @@ public class PromotePlayerToAdminUseCaseTest {
         @Test
         public void shouldThrowUnchangedFieldExceptionWhenPlayerAlreadyIsAnAdmin() {
             UUID id = UUID.randomUUID();
-            Player player = Player.reconstitute(id, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("ADMIN"), Rank.BRONZE, LocalDateTime.now(), LocalDateTime.now());
+            Player player = Player.reconstitute(id, Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of("hashed-password"), Role.of("ADMIN"), LocalDateTime.now(), LocalDateTime.now());
             AuthenticatedPlayer authenticatedPlayer = new AuthenticatedPlayer(UUID.randomUUID(), Role.of("ADMIN"));
 
             Mockito.when(playerQuery.findById(player.getId())).thenReturn(Optional.of(player));

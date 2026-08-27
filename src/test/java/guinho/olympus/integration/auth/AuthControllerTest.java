@@ -3,7 +3,6 @@ package guinho.olympus.integration.auth;
 import guinho.olympus.core.application.usecase.player.dto.CreatePlayerDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
 import guinho.olympus.core.domain.player.Player;
-import guinho.olympus.core.domain.player.enums.Rank;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
 import guinho.olympus.core.domain.player.valueobject.PasswordHash;
@@ -53,7 +52,6 @@ public class AuthControllerTest {
                     .andExpect(jsonPath("$.nickname").value(request.nickname()))
                     .andExpect(jsonPath("$.email").value(request.email()))
                     .andExpect(jsonPath("$.role").value("PLAYER"))
-                    .andExpect(jsonPath("$.rank").value("BRONZE"))
                     .andExpect(jsonPath("$.createdAt").isNotEmpty())
                     .andExpect(jsonPath("$.updatedAt").isNotEmpty());
         }
@@ -77,7 +75,7 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturnConflictWhenNicknameAlreadyExists() throws Exception {
-        Player player = Player.create(Nickname.of("NicknameExists"), Email.of("email@test.com"),  Rank.BRONZE, PasswordHash.of("Password-hash"), Role.of("PLAYER"));
+        Player player = Player.create(Nickname.of("NicknameExists"), Email.of("email@test.com"), PasswordHash.of("Password-hash"), Role.of("PLAYER"));
 
         repository.save(player);
 
@@ -95,7 +93,7 @@ public class AuthControllerTest {
     class LoginPlayer {
         @Test
         public void shouldLoginPlayerWithSuccess() throws Exception {
-            Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), Rank.BRONZE, PasswordHash.of(hasher.hash("StrongPassword!123")), Role.of("member"));
+            Player player = Player.create(Nickname.of("nickname"), Email.of("email@test.com"), PasswordHash.of(hasher.hash("StrongPassword!123")), Role.of("member"));
 
             repository.save(player);
 

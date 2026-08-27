@@ -64,7 +64,7 @@ public class RestAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiError.of(ex.getMessage(), HttpStatus.NOT_FOUND.value()));
+                .body(ApiError.of(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
     @ExceptionHandler(PlayerAccessDeniedException.class)
     public ResponseEntity<ApiError> handlePlayerAccessDeniedException(PlayerAccessDeniedException ex) {
