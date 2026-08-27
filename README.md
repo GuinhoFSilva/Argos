@@ -224,6 +224,5 @@ Retornar os dados do jogador autenticado.
 - Adicionar campo role (player e admin)✅
 - Implementar autorização com base nas roles✅
 - Validar acesso aos endpoints protegidos✅
-- Adicionar campo Rank
 - Implementar refresh token
 - Centralizar autenticação no Spring Security 
