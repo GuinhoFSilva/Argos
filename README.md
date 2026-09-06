@@ -225,4 +225,4 @@ Retornar os dados do jogador autenticado.
 - Implementar autorização com base nas roles✅
 - Validar acesso aos endpoints protegidos✅
 - Implementar refresh token
-- Centralizar autenticação no Spring Security 
+- Centralizar autenticação no Spring Security✅ 
