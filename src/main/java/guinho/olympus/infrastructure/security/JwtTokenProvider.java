@@ -43,24 +43,4 @@ public class JwtTokenProvider implements TokenProvider {
                 .expiration(exp)
                 .compact();
     }
-
-    @Override
-    public Role getRole(String token) {
-        Claims claims = getAllClaimsFromToken(token);
-        return Role.of(claims.get("role", String.class));
-    }
-
-    @Override
-    public boolean validateToken(String token, UUID userId) {
-        Claims claims = getAllClaimsFromToken(token);
-        String tokenUserId = claims.getSubject();
-        return tokenUserId.equals(userId.toString()) && claims.getExpiration().after(new Date());
-    }
-
-    private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
-                .verifyWith(signingKey)
-                .build()
-                .parseSignedClaims(token).getPayload();
-    }
 }
