@@ -4,7 +4,7 @@ import guinho.olympus.core.application.abstractions.Hasher;
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.repository.refresh_token.RefreshTokenMutation;
-import guinho.olympus.core.application.repository.refresh_token.RefreshTokenProvider;
+import guinho.olympus.core.application.provider.RefreshTokenProvider;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginResponseDto;
@@ -13,12 +13,6 @@ import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Password;
 import guinho.olympus.core.domain.refresh_token.RefreshToken;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 public class LoginPlayerUseCase {
     private final PlayerQuery queryService;

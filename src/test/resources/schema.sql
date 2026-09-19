@@ -11,7 +11,7 @@ CREATE TABLE players (
 CREATE TABLE refresh_tokens (
     id VARCHAR(100) PRIMARY KEY,
     player_id VARCHAR(100),
-    token_hash VARCHAR(255),
+    token VARCHAR(255),
     expires_at DATETIME,
     revoked TINYINT(1),
     FOREIGN KEY(player_id) REFERENCES players(id)

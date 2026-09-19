@@ -3,7 +3,7 @@ package guinho.olympus.core.application.usecase.refresh_token;
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.repository.refresh_token.RefreshTokenMutation;
-import guinho.olympus.core.application.repository.refresh_token.RefreshTokenProvider;
+import guinho.olympus.core.application.provider.RefreshTokenProvider;
 import guinho.olympus.core.application.repository.refresh_token.RefreshTokenQuery;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.exception.ExpiredRefreshTokenException;

@@ -1,4 +1,4 @@
-package guinho.olympus.core.application.repository.refresh_token;
+package guinho.olympus.core.application.provider;
 
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.domain.refresh_token.RefreshToken;
