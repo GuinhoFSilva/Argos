@@ -1,13 +1,12 @@
 package guinho.olympus.core.application.usecase.player;
 
-import guinho.olympus.core.application.abstractions.PasswordHasher;
+import guinho.olympus.core.application.abstractions.Hasher;
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
-import guinho.olympus.core.application.usecase.player.dto.CreatePlayerDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginResponseDto;
-import guinho.olympus.core.application.usecase.player.shared.exception.InvalidCredentialsException;
+import guinho.olympus.core.application.usecase.exception.InvalidCredentialsException;
 import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.*;
 import guinho.olympus.core.domain.shared.InvalidArgumentException;
@@ -20,9 +19,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +28,7 @@ class LoginPlayerUseCaseTest {
     @Mock
     private PlayerQuery queryService;
     @Mock
-    private PasswordHasher hasher;
+    private Hasher hasher;
     @Mock
     private TokenProvider tokenProvider;
 

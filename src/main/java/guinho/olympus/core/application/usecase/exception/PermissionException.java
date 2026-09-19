@@ -1,4 +1,4 @@
-package guinho.olympus.core.application.usecase.player.shared.exception;
+package guinho.olympus.core.application.usecase.exception;
 
 public class PermissionException extends RuntimeException {
     public PermissionException(String message) {

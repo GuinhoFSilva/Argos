@@ -3,7 +3,6 @@ package guinho.olympus.infrastructure.security;
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.domain.player.valueobject.Role;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Repository;
@@ -20,7 +19,7 @@ public class JwtTokenProvider implements TokenProvider {
     public JwtTokenProvider() {
         String secret = System.getenv("JWT_SECRET");
 
-        if(secret == null || secret.isBlank()) {
+        if (secret == null || secret.isBlank()) {
             throw new IllegalStateException("JWT_SECRET not defined");
         }
 
@@ -31,7 +30,7 @@ public class JwtTokenProvider implements TokenProvider {
     public String generateToken(AuthenticatedPlayer authenticatedPlayer) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        Date exp = new Date(nowMillis + 3600000);
+        Date exp = new Date(nowMillis + 900000);
         UUID playerId = authenticatedPlayer.playerId();
         Role playerRole = authenticatedPlayer.role();
 

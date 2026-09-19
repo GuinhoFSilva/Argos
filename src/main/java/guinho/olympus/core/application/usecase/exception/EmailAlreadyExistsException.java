@@ -1,4 +1,4 @@
-package guinho.olympus.core.application.usecase.player.shared.exception;
+package guinho.olympus.core.application.usecase.exception;
 
 public class EmailAlreadyExistsException extends RuntimeException {
     public EmailAlreadyExistsException(String message) {

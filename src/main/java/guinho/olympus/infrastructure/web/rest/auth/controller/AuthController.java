@@ -6,6 +6,8 @@ import guinho.olympus.core.application.usecase.player.dto.CreatePlayerDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
 import guinho.olympus.core.application.usecase.player.dto.LoginResponseDto;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
+import guinho.olympus.core.application.usecase.refresh_token.RefreshTokenUseCase;
+import guinho.olympus.core.application.usecase.refresh_token.dto.RefreshTokenRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final LoginPlayerUseCase loginPlayerUseCase;
     private final RegisterPlayerUseCase registerPlayerUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
-    public AuthController(LoginPlayerUseCase loginPlayerUseCase, RegisterPlayerUseCase registerPlayerUseCase) {
+    public AuthController(LoginPlayerUseCase loginPlayerUseCase, RegisterPlayerUseCase registerPlayerUseCase, RefreshTokenUseCase refreshTokenUseCase) {
         this.loginPlayerUseCase = loginPlayerUseCase;
         this.registerPlayerUseCase = registerPlayerUseCase;
+        this.refreshTokenUseCase = refreshTokenUseCase;
     }
 
     @PostMapping("/register")
@@ -34,6 +38,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginInputDto request) {
         LoginResponseDto response = loginPlayerUseCase.execute(request);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponseDto> refresh(@RequestBody RefreshTokenRequest request) {
+        LoginResponseDto response = refreshTokenUseCase.execute(request);
 
         return ResponseEntity.ok().body(response);
     }

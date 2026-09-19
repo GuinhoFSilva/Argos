@@ -5,8 +5,8 @@ import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
 import guinho.olympus.core.application.usecase.player.mapper.PlayerMapper;
-import guinho.olympus.core.application.usecase.player.shared.exception.PermissionException;
-import guinho.olympus.core.application.usecase.player.shared.exception.ResourceNotFoundException;
+import guinho.olympus.core.application.usecase.exception.PermissionException;
+import guinho.olympus.core.application.usecase.exception.ResourceNotFoundException;
 import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Role;
 

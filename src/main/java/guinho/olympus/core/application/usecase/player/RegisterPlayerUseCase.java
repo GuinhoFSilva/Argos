@@ -1,22 +1,22 @@
 package guinho.olympus.core.application.usecase.player;
 
-import guinho.olympus.core.application.abstractions.PasswordHasher;
+import guinho.olympus.core.application.abstractions.Hasher;
 import guinho.olympus.core.application.repository.player.PlayerMutation;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.usecase.player.dto.CreatePlayerDto;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
 import guinho.olympus.core.application.usecase.player.mapper.PlayerMapper;
-import guinho.olympus.core.application.usecase.player.shared.exception.EmailAlreadyExistsException;
-import guinho.olympus.core.application.usecase.player.shared.exception.NicknameAlreadyExistsException;
+import guinho.olympus.core.application.usecase.exception.EmailAlreadyExistsException;
+import guinho.olympus.core.application.usecase.exception.NicknameAlreadyExistsException;
 import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.*;
 
 public class RegisterPlayerUseCase {
     private final PlayerMutation mutationService;
     private final PlayerQuery queryService;
-    private final PasswordHasher hasher;
+    private final Hasher hasher;
 
-    public RegisterPlayerUseCase(PlayerMutation mutationService, PlayerQuery queryService, PasswordHasher hasher) {
+    public RegisterPlayerUseCase(PlayerMutation mutationService, PlayerQuery queryService, Hasher hasher) {
         this.mutationService = mutationService;
         this.queryService = queryService;
         this.hasher = hasher;

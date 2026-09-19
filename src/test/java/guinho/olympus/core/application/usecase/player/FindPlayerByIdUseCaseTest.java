@@ -3,12 +3,9 @@ package guinho.olympus.core.application.usecase.player;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
-import guinho.olympus.core.application.usecase.player.shared.exception.PlayerAccessDeniedException;
-import guinho.olympus.core.application.usecase.player.shared.exception.ResourceNotFoundException;
+import guinho.olympus.core.application.usecase.exception.PlayerAccessDeniedException;
+import guinho.olympus.core.application.usecase.exception.ResourceNotFoundException;
 import guinho.olympus.core.domain.player.Player;
-import guinho.olympus.core.domain.player.valueobject.Email;
-import guinho.olympus.core.domain.player.valueobject.Nickname;
-import guinho.olympus.core.domain.player.valueobject.PasswordHash;
 import guinho.olympus.core.domain.player.valueobject.Role;
 import guinho.olympus.support.PlayerFactory;
 import org.junit.jupiter.api.Nested;
@@ -19,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 

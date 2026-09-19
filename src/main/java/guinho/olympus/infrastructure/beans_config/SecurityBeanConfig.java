@@ -1,7 +1,9 @@
 package guinho.olympus.infrastructure.beans_config;
 
-import guinho.olympus.core.application.abstractions.PasswordHasher;
-import guinho.olympus.infrastructure.security.BCryptPasswordHasherAdapter;
+import guinho.olympus.core.application.usecase.refresh_token.RefreshTokenUseCase;
+import guinho.olympus.infrastructure.persistence.JdbcPlayerRepository;
+import guinho.olympus.infrastructure.persistence.JdbcRefreshTokenRepository;
+import guinho.olympus.infrastructure.security.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,8 +16,8 @@ public class SecurityBeanConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public PasswordHasher passwordHasher(BCryptPasswordEncoder encoder) {
-//        return new BCryptPasswordHasherAdapter(encoder);
-//    }
+    @Bean
+    public RefreshTokenUseCase refreshTokenUseCase(JdbcRefreshTokenRepository jdbcTokenAdapter, JdbcPlayerRepository jdbcPlayerAdapter, JwtTokenProvider tokenAdapter) {
+        return new RefreshTokenUseCase(jdbcTokenAdapter, jdbcTokenAdapter, jdbcPlayerAdapter, tokenAdapter);
+    }
 }

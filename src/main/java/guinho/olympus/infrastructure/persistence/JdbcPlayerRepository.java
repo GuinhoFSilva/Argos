@@ -2,7 +2,7 @@ package guinho.olympus.infrastructure.persistence;
 
 import guinho.olympus.core.application.repository.player.PlayerMutation;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
-import guinho.olympus.core.application.usecase.player.shared.exception.ResourceNotFoundException;
+import guinho.olympus.core.application.usecase.exception.ResourceNotFoundException;
 import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;

@@ -1,6 +1,6 @@
 package guinho.olympus.infrastructure.web.rest.restadvice;
 
-import guinho.olympus.core.application.usecase.player.shared.exception.*;
+import guinho.olympus.core.application.usecase.exception.*;
 import guinho.olympus.core.domain.shared.InvalidArgumentException;
 import guinho.olympus.core.domain.shared.UnchangedFieldException;
 import org.springframework.http.HttpStatus;
@@ -33,6 +33,18 @@ public class RestAdvice {
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ApiError> handleInvalidCredentialsException(InvalidCredentialsException ex) {
+        var error = ApiError.of(ex.getMessage(), HttpStatus.UNAUTHORIZED.value());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ApiError> handleInvalidRefreshTokenException(InvalidRefreshTokenException ex) {
+        var error = ApiError.of(ex.getMessage(), HttpStatus.UNAUTHORIZED.value());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(ExpiredRefreshTokenException.class)
+    public ResponseEntity<ApiError> handleExpiredRefreshTokenException(ExpiredRefreshTokenException ex) {
         var error = ApiError.of(ex.getMessage(), HttpStatus.UNAUTHORIZED.value());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }

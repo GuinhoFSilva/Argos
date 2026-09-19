@@ -1,17 +1,15 @@
 package guinho.olympus.core.application.usecase.player;
 
-import guinho.olympus.core.application.abstractions.PasswordHasher;
+import guinho.olympus.core.application.abstractions.Hasher;
 import guinho.olympus.core.application.repository.player.PlayerMutation;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.usecase.player.dto.CreatePlayerDto;
 import guinho.olympus.core.application.usecase.player.dto.ResponsePlayerDto;
-import guinho.olympus.core.application.usecase.player.shared.exception.EmailAlreadyExistsException;
-import guinho.olympus.core.application.usecase.player.shared.exception.NicknameAlreadyExistsException;
+import guinho.olympus.core.application.usecase.exception.EmailAlreadyExistsException;
+import guinho.olympus.core.application.usecase.exception.NicknameAlreadyExistsException;
 import guinho.olympus.core.domain.player.Player;
 import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.core.domain.player.valueobject.Nickname;
-import guinho.olympus.core.domain.player.valueobject.PasswordHash;
-import guinho.olympus.core.domain.player.valueobject.Role;
 import guinho.olympus.core.domain.shared.InvalidArgumentException;
 import guinho.olympus.support.PlayerFactory;
 import org.junit.jupiter.api.Nested;
@@ -31,7 +29,7 @@ class RegisterPlayerUseCaseTest {
     @Mock
     private PlayerQuery queryService;
     @Mock
-    private PasswordHasher hasher;
+    private Hasher hasher;
 
     @InjectMocks
     private RegisterPlayerUseCase registerUseCase;
