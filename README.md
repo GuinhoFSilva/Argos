@@ -63,11 +63,15 @@ O projeto possui:
 ---
 
 ### Endpoints
-|Método |Endpoint |Auth |Descrição
-|--------|----------|-----------|-----------|
-| POST   | /v1/auth/register |  ❌ | Cadastro
-| POST   | /v1/auth/login    |  ❌ | Login
-| GET    | /v1/players/{id} |  ✅ | Retornar perfil
+|Método |Endpoint |Auth |Admin |Descrição
+|--------|----------|-----------|-----------|-----------|
+| POST   | /v2/auth/register |  ❌ |  ❌ |  Cadastro
+| POST   | /v2/auth/login    |  ❌ |  ❌ |  Login
+| POST   | /v2/auth/refresh    |  ❌ |  ❌ |  Refresh Token
+| GET    | /v2/players/{id} |  ✅ |  ❌ | Retornar perfil
+| GET    | /v2/players |  ✅ | ✅ |  Retornar listagem dos jogadores
+| PATCH  | /v2/players/{id}/promote |  ✅ |  ✅ | Promover um jogador para ADMIN
+
 
 ---
 
@@ -81,8 +85,19 @@ O projeto possui:
 | nickname | String |
 | email | String |
 | passwordHash | String |
+| role | String |
 | createdAt | DateTime |
 | updatedAt | DateTime |
+
+### Refresh Token
+
+| Campo | Tipo |
+|--------|------|
+| id | UUID |
+| playerId | UUID |
+| token | String |
+| expiresAt | DateTime |
+| revoked | Boolean |
 
 ---
 
@@ -216,11 +231,132 @@ Retornar os dados do jogador autenticado.
 
 - O JWT é obrigatório.
 - O token deve estar válido e dentro do prazo de expiração.
-- Apenas o próprio jogador autenticado pode acessar seus dados.
+- Apenas o próprio jogador autenticado ou um ADMIN pode acessar seus dados.
 
 ---
 
-# Roadmap V2
+## Get Players
+
+### Objetivo
+
+Retornar uma lista de todos os jogadores do sistema.
+
+### Entrada
+
+- Access Token JWT
+
+### Fluxo
+
+1. Validar o JWT.
+2. Identificar se o jogador logado é um ADMIN.
+3. Buscar as informações de todos os jogadores.
+4. Retornar os dados.
+
+### Saída
+
+- Uma lista de jogadores contendo:
+  - id
+  - nickname
+  - email
+  - createdAt
+  - updatedAt
+
+### Possíveis Erros
+
+- JWT inválido.
+- JWT expirado.
+- Jogador não é um ADMIN.
+
+### Regras de Negócio
+
+- O JWT é obrigatório.
+- O token deve estar válido e dentro do prazo de expiração.
+- Apenas ADMINs do sistema podem consultar todos os jogadores.
+
+---
+
+## Promote Player
+
+### Objetivo
+
+Promover um player para ADMIN.
+
+### Entrada
+
+- id do Player
+- Access Token JWT
+
+### Fluxo
+
+1. Validar o JWT.
+2. Identificar se o jogador logado é um ADMIN.
+3. Buscar as informações do jogador que será promovido.
+4. Alterar a role do player para ADMIN.
+5. Salvar a alteração
+6. Retornar os dados.
+
+### Saída
+
+- DTO de resposta do Player.
+
+### Possíveis Erros
+
+- JWT inválido.
+- JWT expirado.
+- Jogador não encontrado.
+- Jogador que vai promover não é um ADMIN.
+- Jogador que será promovido já é um ADMIN.
+
+### Regras de Negócio
+
+- O JWT é obrigatório.
+- O token deve estar válido e dentro do prazo de expiração.
+- Apenas ADMINs do sistema podem promover um jogador.
+
+---
+
+## Refresh Token
+
+### Objetivo
+
+Renovar o Access Token e gerar um novo Refresh Token a partir de um Refresh Token válido.
+
+### Entrada
+
+- Refresh token
+  
+### Fluxo
+
+1. Buscar o refresh token no banco de dados.
+2. Validar se o refresh token está expirado.
+3. Validar se o refresh token está revogado..
+4. Buscar o jogador associado ao refresh token.
+5. Revogar o refresh token usado.
+6. Gerar e salvar um novo refresh token para o jogador.
+7. Gerar um novo access token para o jogador.
+8. Retornar os novos tokens gerados.
+
+### Saída
+
+- DTO de resposta contendo os dois tokens.
+
+### Possíveis Erros
+
+- Refresh token não encontrado.
+- Refresh token expirado.
+- Refresh Token revogado/inválido
+- Jogador não encontrado.
+
+### Regras de Negócio
+
+- O Refresh Token antigo deve existir no sistema.
+- O Refresh Token não pode estar expirado nem revogado.
+- Ao realizar a renovação, o Refresh Token antigo é revogado e substituído por um novo.
+- Um novo Access Token é emitido com a role atualizada do jogador.
+
+---
+
+# Roadmap V2 ✅
 - Adicionar campo role (player e admin)✅
 - Implementar autorização com base nas roles✅
 - Validar acesso aos endpoints protegidos✅
