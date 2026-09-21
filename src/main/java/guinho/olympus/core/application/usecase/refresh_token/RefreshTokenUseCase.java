@@ -3,7 +3,7 @@ package guinho.olympus.core.application.usecase.refresh_token;
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.repository.refresh_token.RefreshTokenMutation;
-import guinho.olympus.core.application.provider.RefreshTokenProvider;
+import guinho.olympus.infrastructure.security.RefreshTokenProviderImpl;
 import guinho.olympus.core.application.repository.refresh_token.RefreshTokenQuery;
 import guinho.olympus.core.application.security.AuthenticatedPlayer;
 import guinho.olympus.core.application.usecase.exception.ExpiredRefreshTokenException;
@@ -21,16 +21,18 @@ public class RefreshTokenUseCase {
     private final RefreshTokenMutation refreshTokenMutation;
     private final PlayerQuery playerService;
     private final TokenProvider tokenProvider;
+    private final RefreshTokenProviderImpl refreshTokenProvider;
 
-    public RefreshTokenUseCase(RefreshTokenQuery refreshTokenService, RefreshTokenMutation refreshTokenMutation, PlayerQuery playerService, TokenProvider tokenProvider) {
+    public RefreshTokenUseCase(RefreshTokenQuery refreshTokenService, RefreshTokenMutation refreshTokenMutation, PlayerQuery playerService, TokenProvider tokenProvider, RefreshTokenProviderImpl refreshTokenProvider) {
         this.refreshTokenService = refreshTokenService;
         this.refreshTokenMutation = refreshTokenMutation;
         this.playerService = playerService;
         this.tokenProvider = tokenProvider;
+        this.refreshTokenProvider = refreshTokenProvider;
     }
 
     public LoginResponseDto execute(RefreshTokenRequest request) {
-        RefreshToken oldRefreshToken = refreshTokenService.findByRefreshToken(request.refreshToken()).orElseThrow(() -> new ResourceNotFoundException("Refresh Token Not Found"));
+        RefreshToken oldRefreshToken = refreshTokenService.findByRefreshToken(request.refreshToken()).orElseThrow(() -> new ResourceNotFoundException("Refresh Token Not Found."));
 
         if(oldRefreshToken.isExpired()) {
             throw new ExpiredRefreshTokenException();
@@ -49,7 +51,7 @@ public class RefreshTokenUseCase {
 
         refreshTokenMutation.revoke(oldRefreshToken);
 
-        RefreshToken refreshToken = RefreshTokenProvider.generateRefreshToken(authenticatedPlayer);
+        RefreshToken refreshToken = refreshTokenProvider.generateRefreshToken(authenticatedPlayer);
 
         refreshTokenMutation.save(refreshToken);
 

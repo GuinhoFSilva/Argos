@@ -1,5 +1,6 @@
 package guinho.olympus.infrastructure.beans_config;
 
+import guinho.olympus.infrastructure.security.RefreshTokenProviderImpl;
 import guinho.olympus.core.application.usecase.player.*;
 import guinho.olympus.infrastructure.persistence.JdbcPlayerRepository;
 import guinho.olympus.infrastructure.persistence.JdbcRefreshTokenRepository;
@@ -17,8 +18,8 @@ public class PlayerBeanConfig {
     }
 
     @Bean
-    public LoginPlayerUseCase loginPlayerUseCase(JdbcPlayerRepository jdbcPlayerAdapter, JdbcRefreshTokenRepository jdbcRefreshTokenAdapter, BCryptPasswordHasherAdapter passwordHasherAdapter, JwtTokenProvider tokenAdapter) {
-        return new LoginPlayerUseCase(jdbcPlayerAdapter, jdbcRefreshTokenAdapter, passwordHasherAdapter, tokenAdapter);
+    public LoginPlayerUseCase loginPlayerUseCase(JdbcPlayerRepository jdbcPlayerAdapter, JdbcRefreshTokenRepository jdbcRefreshTokenAdapter, BCryptPasswordHasherAdapter passwordHasherAdapter, JwtTokenProvider tokenAdapter, RefreshTokenProviderImpl refreshTokenProvider) {
+        return new LoginPlayerUseCase(jdbcPlayerAdapter, jdbcRefreshTokenAdapter, passwordHasherAdapter, tokenAdapter, refreshTokenProvider );
     }
 
     @Bean
