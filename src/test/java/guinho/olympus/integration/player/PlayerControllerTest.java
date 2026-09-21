@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.*;
 
 @IntegrationTest
 public class PlayerControllerTest {
+    private static final String PATH = "/v2/players";
 
     @Autowired
     private MockMvc mockMvc;
@@ -55,7 +56,7 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            get("/v1/players/" + saved.getId()).header("Authorization", "Bearer " + token))
+                            get(PATH + "/" + saved.getId()).header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(saved.getId().toString()))
                     .andExpect(jsonPath("$.nickname").value(saved.getNickname().getValue()))
@@ -71,7 +72,7 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            get("/v1/players/" + saved.getId()).header("Authorization", "Bearer " + token))
+                            get(PATH + "/" + saved.getId()).header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(saved.getId().toString()))
                     .andExpect(jsonPath("$.nickname").value(saved.getNickname().getValue()))
@@ -87,7 +88,7 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            get("/v1/players/" + saved.getId()).header("Authorization", "Bearer " + token))
+                            get(PATH + "/" + saved.getId()).header("Authorization", "Bearer " + token))
                     .andExpect(status().isForbidden());
         }
 
@@ -98,7 +99,7 @@ public class PlayerControllerTest {
             Player saved = repository.save(player);
 
             mockMvc.perform(
-                            get("/v1/players/" + saved.getId()))
+                            get(PATH + "/" + saved.getId()))
                     .andExpect(status().isUnauthorized());
         }
 
@@ -109,7 +110,7 @@ public class PlayerControllerTest {
             Player saved = repository.save(player);
 
             mockMvc.perform(
-                            get("/v1/players/" + saved.getId()).header("Authorization", "Bearer " + "invalid-Token"))
+                            get(PATH + "/" + saved.getId()).header("Authorization", "Bearer " + "invalid-Token"))
                     .andExpect(status().isUnauthorized());
         }
 
@@ -121,7 +122,7 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            get("/v1/players/" + UUID.randomUUID()).header("Authorization", "Bearer " + token))
+                            get(PATH + "/" + UUID.randomUUID()).header("Authorization", "Bearer " + token))
                     .andExpect(status().isNotFound());
         }
 
@@ -141,7 +142,7 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            get("/v1/players").header("Authorization", "Bearer " + token))
+                            get(PATH).header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").isArray())
                     .andExpect(jsonPath("$[*].id", containsInAnyOrder(savedPlayer.getId().toString(), savedAnotherPlayer.getId().toString())))
@@ -157,7 +158,7 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            get("/v1/players").header("Authorization", "Bearer " + token))
+                            get(PATH).header("Authorization", "Bearer " + token))
                     .andExpect(status().isNoContent());
         }
 
@@ -168,14 +169,14 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            get("/v1/players").header("Authorization", "Bearer " + token))
+                            get(PATH).header("Authorization", "Bearer " + token))
                     .andExpect(status().isForbidden());
         }
 
         @Test
         public void shouldReturnUnauthorizedWhenTokenIsInvalid() throws Exception {
             mockMvc.perform(
-                            get("/v1/players").header("Authorization", "Bearer " + "invalid-Token"))
+                            get(PATH).header("Authorization", "Bearer " + "invalid-Token"))
                     .andExpect(status().isUnauthorized());
         }
     }
@@ -192,7 +193,7 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            patch("/v1/players/" + saved.getId() + "/promote").header("Authorization", "Bearer " + token))
+                            patch(PATH + "/" + saved.getId() + "/promote").header("Authorization", "Bearer " + token))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(player.getId().toString()))
                     .andExpect(jsonPath("$.role").value("ADMIN"));
@@ -209,7 +210,7 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                    patch("/v1/players/" + saved.getId() + "/promote").header("Authorization", "Bearer " + token))
+                    patch(PATH + "/" + saved.getId() + "/promote").header("Authorization", "Bearer " + token))
                     .andExpect(status().isConflict());
         }
 
@@ -219,14 +220,14 @@ public class PlayerControllerTest {
             String token = tokenProvider.generateToken(authenticatedPlayer);
 
             mockMvc.perform(
-                            patch("/v1/players/" + UUID.randomUUID() + "/promote").header("Authorization", "Bearer " + token))
+                            patch(PATH + "/" + UUID.randomUUID() + "/promote").header("Authorization", "Bearer " + token))
                     .andExpect(status().isForbidden());
         }
 
         @Test
         public void shouldReturnUnauthorizedWhenTokenIsInvalid() throws Exception {
             mockMvc.perform(
-                            get("/v1/players/" + UUID.randomUUID() + "/promote").header("Authorization", "Bearer " + "invalid-Token"))
+                            get(PATH + "/" + UUID.randomUUID() + "/promote").header("Authorization", "Bearer " + "invalid-Token"))
                     .andExpect(status().isUnauthorized());
         }
     }

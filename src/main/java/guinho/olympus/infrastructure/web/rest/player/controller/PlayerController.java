@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/players")
+@RequestMapping("/v2/players")
 public class PlayerController {
     private final FindPlayerByIdUseCase findPlayerByIdUseCase;
     private final FindAllPlayersUseCase findAllPlayersUseCase;

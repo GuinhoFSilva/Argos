@@ -1,6 +1,7 @@
 package guinho.olympus.core.application.usecase.player;
 
 import guinho.olympus.core.application.abstractions.Hasher;
+import guinho.olympus.core.application.abstractions.RefreshTokenProvider;
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.repository.refresh_token.RefreshTokenMutation;
@@ -19,9 +20,9 @@ public class LoginPlayerUseCase {
     private final RefreshTokenMutation refreshTokenService;
     private final Hasher hasher;
     private final TokenProvider tokenProvider;
-    private final RefreshTokenProviderImpl refreshTokenProvider;
+    private final RefreshTokenProvider refreshTokenProvider;
 
-    public LoginPlayerUseCase(PlayerQuery queryService, RefreshTokenMutation refreshTokenService, Hasher hasher, TokenProvider tokenProvider, RefreshTokenProviderImpl refreshTokenProvider) {
+    public LoginPlayerUseCase(PlayerQuery queryService, RefreshTokenMutation refreshTokenService, Hasher hasher, TokenProvider tokenProvider, RefreshTokenProvider refreshTokenProvider) {
         this.queryService = queryService;
         this.refreshTokenService = refreshTokenService;
         this.hasher = hasher;

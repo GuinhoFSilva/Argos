@@ -2,11 +2,8 @@ package guinho.olympus.core.application.usecase.refresh_token;
 
 import guinho.olympus.core.application.abstractions.TokenProvider;
 import guinho.olympus.core.application.usecase.exception.ExpiredRefreshTokenException;
-import guinho.olympus.core.application.usecase.exception.InvalidCredentialsException;
 import guinho.olympus.core.application.usecase.exception.InvalidRefreshTokenException;
 import guinho.olympus.core.application.usecase.exception.ResourceNotFoundException;
-import guinho.olympus.core.application.usecase.player.dto.LoginInputDto;
-import guinho.olympus.core.domain.player.valueobject.Email;
 import guinho.olympus.infrastructure.security.RefreshTokenProviderImpl;
 import guinho.olympus.core.application.repository.player.PlayerQuery;
 import guinho.olympus.core.application.repository.refresh_token.RefreshTokenMutation;
