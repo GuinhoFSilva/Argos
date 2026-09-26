@@ -1,4 +1,4 @@
-# Argos Auth System (V1)
+# Argos Auth System (V2)
 
 ![Java](https://img.shields.io/badge/java-000000.svg?style=for-the-badge&logo=openjdk&logoColor=orange)
 ![JDBC](https://img.shields.io/badge/Jdbc-000000?style=for-the-badge&logo=openjdk&logoColor=orange)
@@ -13,8 +13,8 @@
 ![repo size](https://img.shields.io/github/repo-size/GuinhoFSilva/argos?style=for-the-badge&color=000000&labelColor=000000) 
 
 
-> O **Argos Auth (V1)** é o microsserviço de autenticação e gerenciamento de identidade do ecossistema Olympus.
-> Nesta primeira versão, oferece cadastro de jogadores, autenticação baseada em JWT e consulta do perfil autenticado.
+> O **Argos Auth (V2)** é o microsserviço de autenticação e gerenciamento de identidade do ecossistema Olympus.
+> Nesta versão, oferece cadastro de jogadores, autenticação e autorização baseada em JWT e consulta do perfil autenticado.
 
 ## Features
 
@@ -102,7 +102,7 @@ O projeto possui:
 ---
 
 # Casos de Uso
-> Nota: Esses são os casos de uso referentes à versão 1 do projeto.
+> Nota: Esses são os casos de uso referentes à versão 2 do projeto.
 ## Register Player
 
 ### Objetivo
@@ -354,11 +354,4 @@ Renovar o Access Token e gerar um novo Refresh Token a partir de um Refresh Toke
 - Ao realizar a renovação, o Refresh Token antigo é revogado e substituído por um novo.
 - Um novo Access Token é emitido com a role atualizada do jogador.
 
----
-
-# Roadmap V2 ✅
-- Adicionar campo role (player e admin)✅
-- Implementar autorização com base nas roles✅
-- Validar acesso aos endpoints protegidos✅
-- Implementar refresh token✅
-- Centralizar autenticação no Spring Security✅ 
+--- 
